@@ -1,0 +1,26 @@
+.radio-btn {
+    display: flex;
+    padding: 1%;
+}
+
+.form__form-group-radio-panel-wrap {
+    width: 100%;
+}
+
+.radio-btn__radio {
+    float: left;
+    position: relative; 
+}
+
+.radio-btn__label {
+   width: 100%;
+   float: right;
+   text-align: left; 
+   position: absolute; 
+   left: 100px; 
+}
+
+.radio-panel {
+    margin-left: 5%; 
+}
+

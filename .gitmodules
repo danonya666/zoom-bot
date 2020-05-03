@@ -1,0 +1,3 @@
+[submodule "Emotion-recognition"]
+	path = Emotion-recognition
+	url = ./Emotion-recognition

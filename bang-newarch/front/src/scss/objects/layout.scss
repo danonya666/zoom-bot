@@ -1,0 +1,23 @@
+.container {
+  @media screen and (min-width: 768px) {
+    width: 100%;
+    max-width: 1630px;
+  }
+}
+
+.wrapper {
+  @include themify($themes) {
+    background: themed('colorBackgroundBody');
+  }
+}
+
+.container__wrap {
+  padding-left: 0;
+  padding-top: 30px;
+  min-height: 100vh;
+  transition: padding-left 0.3s;
+
+  @media screen and (min-width: 576px) {
+    padding-left: 30px;
+  }
+}

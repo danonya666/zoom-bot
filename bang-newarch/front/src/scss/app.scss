@@ -1,0 +1,29 @@
+@import 'settings/variable';  //themes' colors
+
+//vendor...
+@import './vendor';
+
+//base...
+@import 'generic/normalize.scss';
+@import 'generic/box-sizing.scss';
+@import './base/scaffolding';         // styles of base elements
+@import './base/typography';          // base styles of h1-h6, p, span
+
+//components...
+@import 'component/base';
+@import 'component/card';
+@import 'component/form';
+@import 'component/btn';
+@import 'component/chat';
+@import 'component/table';
+@import 'component/text-editor';
+@import 'component/landing';
+@import 'component/pagination';
+@import 'component/topbar';                 // components/topbar/*
+@import 'component/surveydesign';
+@import 'component/faq';
+@import 'component/modal';
+
+//objects...
+@import 'objects/layout.scss';        // layout settings
+
