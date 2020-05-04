@@ -21,7 +21,7 @@ import {
   UncontrolledCollapse,
   Button,
   ButtonGroup,
-  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip
+  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -37,208 +37,217 @@ import ClockIcon from "mdi-react/ClockIcon";
 
 class LessonSingle extends React.Component {
   state = {
-    user: '',
-    round: '',
-    userOptions: [],
-    roundOptions: [],
-    chat: {},
-    members: [],
-    preSurvey: {},
-    midSurvey: {},
-    finalSurvey: null,
     isReady: false,
-    downloadLink: ''
+    lessons: [
+      {
+        id: 1,
+        title: '03.05',
+        nodes: [
+          {
+            id: 11,
+            title: '4 "A" 9:00',
+          },
+          {
+            id: 12,
+            title: '4 "Б" 10:00',
+          },
+          {
+            id: 13,
+            title: '4 "В" 11:00',
+          },
+        ]
+      },
+      {
+        id: 2,
+        title: '04.05',
+        nodes: [
+          {
+            id: 21,
+            title: '4 "A" 9:00',
+          },
+          {
+            id: 22,
+            title: '4 "Б" 10:00',
+          },
+          {
+            id: 23,
+            title: '4 "В" 11:00',
+          },
+        ]
+      },
+      {
+        id: 3,
+        title: '05.05',
+        nodes: [
+          {
+            id: 31,
+            title: '4 "A" 9:00',
+          },
+        ]
+      },
+    ],
+    activeNodeId: null,
+    students: [
+      {
+        photo: 'http://via.placeholder.com/64/',
+        fullName: 'Фамилия Имя Отчество',
+        emotions: [
+          {type:'angry',value:2},
+          {type:'sad',value:6},
+          {type:'scared',value:2},
+          {type:'neutral',value:10},
+          {type:'surprised',value:15},
+          {type:'angry',value:3},
+          {type:'scared',value:7},
+          {type:'surprised',value:25},
+          {type:'sad',value:40},
+        ],
+        time: '15m'
+      }
+    ]
   }
 
-  componentWillMount() {
-    this.props.loadBatchResult(this.props.match.params.id).then(() => {
-      const batch = this.props.batch;
-      let userOptions = batch.users.map((x) => {
-        return {value: x.user._id, label: x.nickname + ' (' + x.user.mturkId + ')'};
-      });
-      let roundOptions = batch.rounds.map((x, index) => {
-        return {value: index + 1, label: index + 1};
-      });
-      const blob = new Blob([JSON.stringify(batch)], {type: 'application/json'});
+  get activeNode() {
+    for(let i = 0; i < this.state.lessons.length;i++) {
+      const lesson = this.state.lessons[i];
+      for(let j = 0; j < lesson.nodes.length;j++) {
+        const node = lesson.nodes[j];
+        if(node.id === this.state.activeNodeId)
+          return node;
+      }
+    }
+  }
+
+  colorByEmotion(emotion) {
+    switch(emotion) {
+      case 'angry':
+      case 'sad':
+        return 'danger';
+      case 'happy':
+      case 'surprised':
+        return 'success';
+      case 'disgust':
+      case 'scared':
+        return 'warning';
+      case 'neutral':
+        return 'info';
+      default:
+        return 'info';
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
       this.setState({
         isReady: true,
-        userOptions: userOptions,
-        roundOptions: roundOptions,
-        downloadLink: URL.createObjectURL(blob)
-      });
-    });
+      })
+    }, Math.random() * 2500)
   }
 
-  handleChangeUser = (e) => {
-    const user = e.value;
-    let chat = {}, members = [], preSurvey = {}, midSurvey = {};
-    if (!!this.state.round && user) {
-      const batch = this.props.batch;
-      const team = batch.rounds[this.state.round - 1].teams[batch.rounds[this.state.round - 1].teams
-        .findIndex(x => x.users.some(y => y.user === user))]
-      chat = team.chat;
-      preSurvey = team.users.find(x => x.user === user).preSurvey;
-      midSurvey = team.users.find(x => x.user === user).midSurvey;
-      members = team.users.map(user => {
-        let newUser = JSON.parse(JSON.stringify(user))
-        newUser.nickname = user.nickname + ' | ' + this.state.userOptions.find(x => x.value === user.user).label
-        return newUser;
-      });
-    }
+  onSetActiveNode(id) {
+    if(id === this.state.activeNode)
+      return;
     this.setState({
-      user: user, chat: chat, members: members, midSurvey: midSurvey, preSurvey: preSurvey,
-      finalSurvey: this.props.batch.users.find(x => x.user._id === user).survey
-    });
+      activeNodeId: id,
+    })
+    // Здесь фетчить юзеров группы по activeNodeId и в students класть
   }
 
-  handleChangeRound = (e) => {
-    const round = e.value;
-    let chat = {}, members = [], preSurvey = {}, midSurvey = {};
-    if (!!this.state.user && round) {
-      const batch = this.props.batch;
-      const team = batch.rounds[round - 1].teams[batch.rounds[round - 1].teams
-        .findIndex(x => x.users.some(y => y.user === this.state.user))]
-      chat = team.chat;
-      members = team.users.map(user => {
-        let newUser = JSON.parse(JSON.stringify(user))
-        newUser.nickname = user.nickname + ' | ' + this.state.userOptions.find(x => x.value === user.user).label
-        return newUser;
-      });
-      preSurvey = team.users.find(x => x.user === this.state.user).preSurvey;
-      midSurvey = team.users.find(x => x.user === this.state.user).midSurvey;
-    }
-    this.setState({round: round, chat: chat, members: members, preSurvey: preSurvey, midSurvey: midSurvey})
-  }
 
   render() {
-    const {batch, defaultMidQuestions} = this.props;
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>
           <Col md={12} lg={12} xl={12}>
             <Card>
-              {this.state.isReady &&
-              <CardBody>
-                <Row>
-                  <Col md={12} lg={4}>
-                    <div className='card__title'>
-                      <h5 className='bold-text'>My lessons</h5>
-                    </div>
-                    <ButtonGroup vertical style={{width: '100%'}}>
-                      <Button block color="btn btn-noanim btn-lesson text-left" id="toggler1">
-                        03.05
-                      </Button>
-                      <UncontrolledCollapse toggler="#toggler1">
-                        <ListGroup>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 9:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action active>4 "А" 10:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 11:00</ListGroupItem>
-                        </ListGroup>
-                      </UncontrolledCollapse>
-                      <Button block color="btn btn-noanim btn-lesson text-left" id="toggler2">
-                        05.05
-                      </Button>
-                      <UncontrolledCollapse toggler="#toggler2">
-                        <ListGroup>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 9:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 10:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 11:00</ListGroupItem>
-                        </ListGroup>
-                      </UncontrolledCollapse>
-                      <Button block color="btn btn-noanim btn-lesson text-left" id="toggler3">
-                        05.05
-                      </Button>
-                      <UncontrolledCollapse toggler="#toggler3">
-                        <ListGroup>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 9:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 10:00</ListGroupItem>
-                          <ListGroupItem tag="a" href="#" action>4 "А" 11:00</ListGroupItem>
-                        </ListGroup>
-                      </UncontrolledCollapse>
+              {this.state.isReady ?
+                <CardBody>
+                  <Row>
+                    <Col md={12} lg={4}>
+                      <div className='card__title'>
+                        <h5 className='bold-text'>My lessons</h5>
+                      </div>
+                      <ButtonGroup vertical style={{width: '100%'}}>
+                        {
+                          this.state.lessons.map(lesson =>
+                            <div style={{width: '100%'}} key={lesson.id}>
+                              <Button block color="btn btn-noanim btn-lesson text-left" id={"toggler"+lesson.id}>
+                                {lesson.title}
+                              </Button>
+                              <UncontrolledCollapse toggler={"#toggler"+lesson.id}>
+                                <ListGroup>
+                                  {
+                                    lesson.nodes.map(node =>
+                                      <ListGroupItem
+                                        tag="a"
+                                        href="#"
+                                        action
+                                        active={node.id === this.state.activeNodeId}
+                                        onClick={() => this.onSetActiveNode(node.id)}
+                                        key={node.id}
+                                      >{node.title}</ListGroupItem>
+                                    )
+                                  }
+                                </ListGroup>
+                              </UncontrolledCollapse>
+                            </div>
+                          )
+                        }
 
-                    </ButtonGroup>
-                  </Col>
-                  <Col md={12} lg={8}>
-                    <div className='card__title'>
-                      <h5 className='bold-text'>My lessons</h5>
-                    </div>
-                    <Table borderless hover>
-                      <thead>
+
+                      </ButtonGroup>
+                    </Col>
+                    <Col md={12} lg={8}>
+                      <div className='card__title'>
+                        <h5 className='bold-text'>My lessons</h5>
+                      </div>
+                      <Table borderless hover>
+                        <thead>
                         <tr>
-                          <th colSpan={3}>4 "А" 10:00</th>
+                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) ||'Не выбрана'}</th>
                           <th>
-                            <ClockIcon outline />
+                            <ClockIcon/>
                           </th>
                         </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td style={{width:'84px'}}>
-                            <Media src="http://via.placeholder.com/64/" width={64} height={64}/>
-                          </td>
-                          <td  style={{width:'250px'}}>
-                            <b>Петров Петр Николаевич</b>
-                          </td>
-                          <td>
-                            <Progress multi>
-                              <Progress bar value="10" id="UncontrolledTooltipExample"/>
-                              <Progress bar color="success" value="30" />
-                              <Progress bar color="info" value="25" />
-                              <Progress bar color="warning" value="20" />
-                              <Progress bar color="danger" value="15" />
-                            </Progress>
-                          </td>
+                        </thead>
+                        <tbody>
+                        {
+                          this.state.students.map(student =>
+                            <tr key={student.id}>
+                              <td style={{width: '84px'}}>
+                                <Media src={student.photo} width={64} height={64}/>
+                              </td>
+                              <td style={{width: '250px'}}>
+                                <b>{student.fullName}</b>
+                              </td>
+                              <td>
+                                <Progress multi>
+                                  {
+                                    student.emotions.map(emotion =>
+                                      <Progress key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`} bar color={this.colorByEmotion(emotion.type)} value={emotion.value}/>
+                                    )
+                                  }
+                                </Progress>
+                              </td>
 
-                          <td style={{width:'84px'}}>
-                            15m
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{width:'84px'}}>
-                            <Media src="http://via.placeholder.com/64/" width={64} height={64}/>
-                          </td>
-                          <td  style={{width:'250px'}}>
-                            <b>Петров Петр Николаевич</b>
-                          </td>
-                          <td>
-                            <Progress multi>
-                              <Progress bar value="50" />
-                              <Progress bar color="success" value="10" />
-                              <Progress bar color="info" value="15" />
-                              <Progress bar color="warning" value="25" />
-                              <Progress bar color="danger" value="10" />
-                            </Progress>
-                          </td>
-                          <td style={{width:'84px'}}>
-                            15m
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{width:'84px'}}>
-                            <Media src="http://via.placeholder.com/64/" width={64} height={64}/>
-                          </td>
-                          <td  style={{width:'250px'}}>
-                            <b>Петров Петр Николаевич</b>
-                          </td>
-                          <td>
-                            <Progress multi>
-                              <Progress bar value="15" />
-                              <Progress bar color="info" value="10" />
-                              <Progress bar color="success" value="50" />
-                              <Progress bar color="warning" value="20" />
-                              <Progress bar color="danger" value="20" />
-                            </Progress>
-                          </td>
-                          <td style={{width:'84px'}}>
-                            15m
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </Col>
-                </Row>
+                              <td style={{width: '84px'}}>
+                                {student.time}
+                              </td>
+                            </tr>
+                          )
+                        }
+                        </tbody>
+                      </Table>
+                    </Col>
+                  </Row>
 
-              </CardBody>}
+                </CardBody> :
+                <Card>
+                  <CardBody style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <Spinner style={{width: '3rem', height: '3rem', background: '#387aff'}} type="grow"/>
+                  </CardBody>
+                </Card>
+              }
             </Card>
           </Col>
         </Row>
@@ -248,35 +257,13 @@ class LessonSingle extends React.Component {
 }
 
 function mapStateToProps(state) {
-  let defaultMidQuestions = !state.admin.batch
-    ? []
-    : state.admin.batch.midQuestions.map((q) => {
-      let question = {};
-      question.type = 'select';
-      question.question = q;
-      question.selectOptions = [
-        {value: 1, label: 'Strongly Disagree'},
-        {value: 2, label: 'Disagree'},
-        {value: 3, label: 'Neutral'},
-        {value: 4, label: 'Agree'},
-        {value: 5, label: 'Strongly Agree'}
-      ];
-      return question;
-    });
-
   return {
-    batch: state.admin.batch,
-    defaultMidQuestions: defaultMidQuestions
+
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      loadBatchResult
-    },
-    dispatch
-  );
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonSingle);
