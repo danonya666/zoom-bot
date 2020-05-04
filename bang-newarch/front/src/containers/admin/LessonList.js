@@ -185,23 +185,41 @@ class LessonList extends React.Component {
     let newStudents = [];
     for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
+      Math.random() > 0.5 ?
       newStudents.push({
         ...student,
         photo: img,
-      });
+      }) : 1;
     }
     this.setState({
       cool_students: newStudents,
     })
+    return newStudents
   }
 
   onSetActiveNode(id) {
     if(id === this.state.activeNode)
       return;
+    console.log('new active node', id)
     this.setState({
       activeNodeId: id,
     })
-    // Здесь фетчить юзеров группы по activeNodeId и в students класть
+    const updatedCoolStudents = this.setStudentsRandomPhotos();
+    console.log('uCS', updatedCoolStudents);
+    this.setState({ cool_students: updatedCoolStudents });
+  }
+
+  getEmotionByColor(color) {
+    switch(color) {
+      case 'danger':
+        return 'Злость';
+      case 'warning':
+        return 'Испуг';
+      case 'success':
+        return 'Радость';
+      case 'info':
+        return 'Спокойствие';
+    }
   }
 
 
@@ -257,12 +275,33 @@ class LessonList extends React.Component {
                         <thead>
                         <tr>
                           <th colSpan={3}>
-                            <a href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
-                            {(this.activeNode && this.activeNode.title) ||'Не выбран урок'}
-                            </a>
+                            {this.activeNode?
+                              <div className='color-definitions'>
+                                <a style={{marginRight: '2rem'}} href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
+                                  {this.activeNode.title}
+                                </a>
+                                <div className='color-definitions'>
+                                {
+                                  ['danger','warning','success','info'].map(color =>
+                                    <div className="color-definition">
+                                      <div className={color}></div>
+                                      <span>- {this.getEmotionByColor(color)}</span>
+                                    </div>
+                                  )
+                                }
+                                </div>
+                              </div>:
+                              <p>
+                                Выберите урок
+                              </p>
+                            }
+
                           </th>
                           <th>
-                            <ClockIcon/>
+                            <ClockIcon color="#DC3545" id="clock-tooltip" />
+                            <UncontrolledTooltip placement="top" target="clock-tooltip">
+                              Время отсутствия в кадре
+                            </UncontrolledTooltip>
                           </th>
                         </tr>
                         </thead>
@@ -274,7 +313,6 @@ class LessonList extends React.Component {
                             ?this.state.cool_students.map(student =>
                               {
                                 const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
-                                console.log('studentttt', student.lessons[0]);
                                 return <tr key={student.id}>
                                   <td style={{width: '84px'}}>
                                     <Media src={student.photo} width={64} height={64}/>
@@ -288,7 +326,6 @@ class LessonList extends React.Component {
                                         student.lessons[0].emotions.map(emotion =>
                                         {
                                           const value = this.dif(emotion) / fullLength * 100
-                                          console.log('value', emotion);
                                           return <Progress
                                               key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
                                               bar
