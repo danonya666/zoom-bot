@@ -15,6 +15,9 @@ import {loadTemplateList, cloneTemplate, deleteTemplate} from 'Actions/templates
 import {history} from 'App/history';
 import AccountMultiplePlusIcon from "mdi-react/AccountMultiplePlusIcon";
 import PlusIcon from "mdi-react/PlusIcon";
+import ContentCopyIcon from "mdi-react/ContentCopyIcon";
+import TrashCanIcon from "mdi-react/TrashCanIcon";
+import TrashCanOutlineIcon from "mdi-react/TrashCanOutlineIcon";
 
 class ClassList extends React.Component {
 
@@ -36,8 +39,8 @@ class ClassList extends React.Component {
             <Card>
               <CardBody>
                 <div className='card__title'>
-                  <Container fluid className="justify-content-md-between flex ai-bottom no-padding">
-                    <h5 className='bold-text'>Class list</h5>
+                  <Container fluid className="justify-content-md-between flex ai-top no-padding">
+                    <h5 className='bold-text'>Список классов</h5>
                     <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>
                       <PlusIcon size={24} />
                     </Button>
@@ -47,11 +50,9 @@ class ClassList extends React.Component {
                   <thead>
                   <tr>
                     <th>#</th>
-                    <th>name</th>
-                    <th>size</th>
-                    {/*<th>team format</th>*/}
-                    <th>clone</th>
-                    <th>delete</th>
+                    <th>Название</th>
+                    <th>Кол-во учеников</th>
+                    <th style={{width: '180px'}}>Действия</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -66,14 +67,12 @@ class ClassList extends React.Component {
                         <Button className="btn btn-primary"
                                 style={{padding: '2px 10px', marginBottom: '0px'}}
                                 onClick={() => this.props.cloneTemplate(template._id)}>
-                          clone
+                          <ContentCopyIcon size={20}/>
                         </Button>
-                      </td>
-                      <td>
                         <Button className="btn btn-danger"
                                 style={{padding: '2px 10px', marginBottom: '0px'}}
                                 onClick={() => this.props.deleteTemplate(template._id)}>
-                          delete
+                          <TrashCanOutlineIcon size={20}/>
                         </Button>
                       </td>
                     </tr>

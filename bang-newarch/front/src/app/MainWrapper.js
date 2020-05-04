@@ -56,17 +56,17 @@ class MainWrapper extends PureComponent {
               >
                 <Container fluid className="justify-content-md-start">
                   <img src={require('../img/ZoomLogo.png')} className="header-logo"/>
-                  <Link className="topbar__collapse-link" to="/home">
-                    home
-                  </Link>
+                  {/*<Link className="topbar__collapse-link" to="/home">*/}
+                  {/*  Главная*/}
+                  {/*</Link>*/}
                   {/*<Link className="topbar__collapse-link" to="/users">*/}
                   {/*  users*/}
                   {/*</Link>*/}
                   <Link className="topbar__collapse-link" to="/lessons">
-                    lessons
+                    Уроки
                   </Link>
                   <Link className="topbar__collapse-link" to="/classes">
-                    classes
+                    Классы
                   </Link>
                   {/*<Link className="topbar__collapse-link" to="/surveys">*/}
                   {/*  surveys*/}
