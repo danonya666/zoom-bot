@@ -15,6 +15,7 @@ import {loadBatchList, addBatch, stopBatch, clearBatches, switchBatchesVisibilit
 import moment from 'moment'
 import {history} from 'App/history';
 import Pagination from 'Components/Pagination';
+import PlusIcon from "mdi-react/PlusIcon";
 
 const pageSize = 10;
 
@@ -59,13 +60,12 @@ class LessonList extends React.Component {
             <Card>
               {this.state.isReady && <CardBody>
                 <div className='card__title'>
-                  <Row style={{marginLeft: '0px', marginBottom: '10px', justifyContent: 'space-between'}}>
-                    <h5 className='bold-text' >Lesson list</h5>
-                    <Button className="btn btn-primary" onClick={() => this.props.switchBatchesVisibility(!this.props.hideEmptyBatches)}>
-                      {this.props.hideEmptyBatches ? 'show' : 'hide'} finished lessons
+                  <Container fluid className="justify-content-md-between flex ai-bottom no-padding">
+                    <h5 className='bold-text'>Lesson list</h5>
+                    <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>
+                      <PlusIcon size={24} />
                     </Button>
-                  </Row>
-                  <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>Add Lesson</Button>
+                  </Container>
                 </div>
                 <Table className='table table--bordered table--head-accent table-hover'>
                   <thead>
