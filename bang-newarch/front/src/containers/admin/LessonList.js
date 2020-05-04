@@ -1,10 +1,10 @@
-/** BatchList.js
+/** LessonList.js
  *  front-end
- * 
+ *
  *  admin only layout for viewing all batches
- * 
+ *
  *  called by:
- *    1. Router.js    
+ *    1. Router.js
  */
 
 import React from 'react';
@@ -18,7 +18,7 @@ import Pagination from 'Components/Pagination';
 
 const pageSize = 10;
 
-class BatchList extends React.Component {
+class LessonList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -134,4 +134,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default
-connect(mapStateToProps, mapDispatchToProps)(BatchList);
+connect(mapStateToProps, mapDispatchToProps)(LessonList);
