@@ -166,14 +166,21 @@ class LessonSingle extends React.Component {
         isReady: true,
       })
     }, Math.random() * 2500)
-    this.state.students.forEach(async student => {
+
+    this.setStudentsRandomPhotos();
+  }
+
+  async setStudentsRandomPhotos() {
+    let newStudents = [];
+    for(const student of this.state.students) {
       const img = await this.getRandomUserImage();
-      this.setState({
-        students: [
-          ...this.state.students.filter(_=>_.id!==student.id),
-          {...student, photo: img},
-        ]
-      })
+      newStudents.push({
+        ...student,
+        photo: img,
+      });
+    }
+    this.setState({
+      students: newStudents,
     })
   }
 
