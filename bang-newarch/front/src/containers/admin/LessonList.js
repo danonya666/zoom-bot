@@ -62,7 +62,7 @@ class LessonList extends React.Component {
                 <div className='card__title'>
                   <Container fluid className="justify-content-md-between flex ai-bottom no-padding">
                     <h5 className='bold-text'>Lesson list</h5>
-                    <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>
+                    <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>
                       <PlusIcon size={24} />
                     </Button>
                   </Container>
