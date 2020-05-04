@@ -21,7 +21,7 @@ import {
   UncontrolledCollapse,
   Button,
   ButtonGroup,
-  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner
+  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner, CardImg, CardText, CardTitle
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -34,73 +34,78 @@ import RoundSurveyForm from "../RoundSurveyForm";
 import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
+import {Bar, Doughnut, Line} from "react-chartjs-2";
+
+const EMOTIONS = {
+  '-3': 'Злость',
+  '-2': 'Отвращение',
+  '-1': 'Грусть',
+  '0': 'Испуг',
+  '1': 'Спокойствие',
+  '2': 'Радость',
+  '3': 'Восхищение',
+}
+
+const lineOptions = {
+  legend: {
+    display: false
+  },
+  layout: {
+    padding: {
+      bottom: 20
+    }
+  },
+  tooltips: {
+    enabled: false,
+  },
+  scales:{
+    xAxes: [{
+      display: false,
+    }],
+    yAxes: [{
+      gridLines: {
+        display:false,
+      },
+      ticks: {
+        suggestedMin: -3,    // minimum will be 0, unless there is a lower value.
+        suggestedMax: 3,
+        stepSize: 1,
+        callback: function(value, index, values) {
+          return EMOTIONS[value];
+        },
+        fontSize: 10,
+        minRotation : 0,
+        gridLines: {
+          zeroLineWidth: 3,
+          zeroLineColor: "#2C292E",
+        },
+      }
+    }]
+  },
+}
 
 class LessonSingle extends React.Component {
   state = {
     isReady: false,
-    lessons: [
-      {
-        id: 1,
-        title: '03.05',
-        nodes: [
-          {
-            id: 11,
-            title: '4 "A" 9:00',
-          },
-          {
-            id: 12,
-            title: '4 "Б" 10:00',
-          },
-          {
-            id: 13,
-            title: '4 "В" 11:00',
-          },
-        ]
-      },
-      {
-        id: 2,
-        title: '04.05',
-        nodes: [
-          {
-            id: 21,
-            title: '4 "A" 9:00',
-          },
-          {
-            id: 22,
-            title: '4 "Б" 10:00',
-          },
-          {
-            id: 23,
-            title: '4 "В" 11:00',
-          },
-        ]
-      },
-      {
-        id: 3,
-        title: '05.05',
-        nodes: [
-          {
-            id: 31,
-            title: '4 "A" 9:00',
-          },
-        ]
-      },
-    ],
+    lesson: {
+      id: 1,
+      title: '4:20 LESSON',
+    },
     activeNodeId: null,
     students: [
       {
         photo: 'http://via.placeholder.com/64/',
         fullName: 'Фамилия Имя Отчество',
         emotions: [
-          {type:'angry',value:2},
-          {type:'sad',value:6},
-          {type:'scared',value:2},
-          {type:'neutral',value:10},
-          {type:'surprised',value:15},
-          {type:'angry',value:3},
-          {type:'scared',value:7},
-          {type:'surprised',value:25},
-          {type:'sad',value:40},
+          {type: 'angry', value: 2},
+          {type: 'sad', value: 6},
+          {type: 'scared', value: 2},
+          {type: 'neutral', value: 10},
+          {type: 'surprised', value: 15},
+          {type: 'angry', value: 3},
+          {type: 'scared', value: 7},
+          {type: 'surprised', value: 25},
+          {type: 'sad', value: 40},
         ],
         time: '15m',
         id: 1,
@@ -109,15 +114,15 @@ class LessonSingle extends React.Component {
         photo: 'http://via.placeholder.com/64/',
         fullName: 'Фамилия Имя Отчество2',
         emotions: [
-          {type:'angry',value:2},
-          {type:'sad',value:6},
-          {type:'scared',value:2},
-          {type:'neutral',value:10},
-          {type:'surprised',value:15},
-          {type:'angry',value:3},
-          {type:'scared',value:7},
-          {type:'surprised',value:25},
-          {type:'sad',value:40},
+          {type: 'angry', value: 2},
+          {type: 'sad', value: 6},
+          {type: 'scared', value: 2},
+          {type: 'neutral', value: 10},
+          {type: 'surprised', value: 15},
+          {type: 'angry', value: 3},
+          {type: 'scared', value: 7},
+          {type: 'surprised', value: 25},
+          {type: 'sad', value: 40},
         ],
         time: '15m',
         id: 2,
@@ -125,19 +130,8 @@ class LessonSingle extends React.Component {
     ]
   }
 
-  get activeNode() {
-    for(let i = 0; i < this.state.lessons.length;i++) {
-      const lesson = this.state.lessons[i];
-      for(let j = 0; j < lesson.nodes.length;j++) {
-        const node = lesson.nodes[j];
-        if(node.id === this.state.activeNodeId)
-          return node;
-      }
-    }
-  }
-
   colorByEmotion(emotion) {
-    switch(emotion) {
+    switch (emotion) {
       case 'angry':
       case 'sad':
         return 'danger';
@@ -154,12 +148,6 @@ class LessonSingle extends React.Component {
     }
   }
 
-  async getRandomUserImage() {
-    const result = await fetch('https://randomuser.me/api/');
-    const json = await result.json();
-    return json.results[0].picture.thumbnail;
-  }
-
   componentDidMount() {
     setTimeout(() => {
       this.setState({
@@ -167,31 +155,42 @@ class LessonSingle extends React.Component {
       })
     }, Math.random() * 2500)
 
-    this.setStudentsRandomPhotos();
   }
 
-  async setStudentsRandomPhotos() {
-    let newStudents = [];
-    for(const student of this.state.students) {
-      const img = await this.getRandomUserImage();
-      newStudents.push({
-        ...student,
-        photo: img,
-      });
-    }
-    this.setState({
-      students: newStudents,
-    })
+  getChartDataset(data, color = 'rgba(75,192,192,{})') {
+    const backgroundColor = color.replace('{}','0.4');
+    const borderColor = color.replace('{}','1');
+    const pointBorderColor = color.replace('{}','1');
+    const pointHoverBorderColor = color.replace('{}','1');
+    const pointHoverBackgroundColor = color.replace('{}','1');
+    return {
+      labels: [...new Array(data.length)].map((item,i)=>i),
+        datasets: [
+        {
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor,
+          borderColor,
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor,
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor,
+          pointHoverBorderColor,
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data,
+        }
+      ]
+    };
   }
 
-  onSetActiveNode(id) {
-    if(id === this.state.activeNode)
-      return;
-    this.setState({
-      activeNodeId: id,
-    })
-    // Здесь фетчить юзеров группы по activeNodeId и в students класть
-  }
+
 
 
   render() {
@@ -202,49 +201,89 @@ class LessonSingle extends React.Component {
             <Card>
               {this.state.isReady ?
                 <CardBody>
+                  <div className='card__title'>
+                    <h5 className='bold-text'>{this.state.lesson.title}</h5>
+                  </div>
                   <Row>
-                    <Col md={12} lg={3}>
-                      <div className='card__title'>
-                        <h5 className='bold-text'>My lessons</h5>
-                      </div>
-                      <ButtonGroup vertical style={{width: '100%'}}>
-                        {
-                          this.state.lessons.map(lesson =>
-                            <div style={{width: '100%'}} key={lesson.id}>
-                              <Button block color="btn btn-noanim btn-lesson text-left" id={"toggler"+lesson.id}>
-                                {lesson.title}
-                              </Button>
-                              <UncontrolledCollapse toggler={"#toggler"+lesson.id}>
-                                <ListGroup>
-                                  {
-                                    lesson.nodes.map(node =>
-                                      <ListGroupItem
-                                        tag="a"
-                                        href="#"
-                                        action
-                                        active={node.id === this.state.activeNodeId}
-                                        onClick={() => this.onSetActiveNode(node.id)}
-                                        key={node.id}
-                                      >{node.title}</ListGroupItem>
-                                    )
-                                  }
-                                </ListGroup>
-                              </UncontrolledCollapse>
-                            </div>
-                          )
-                        }
+                    <Col md={12} lg={4}>
+                      <Card className='card-shadow'>
+                        <CardBody>
+                          <h5>
+                            Общая статистика
+                          </h5>
+                          <CardTitle>По эмоциям</CardTitle>
 
+                          <Doughnut data={{
+                            datasets: [{
+                              data: [10, 20, 30],
+                              backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"]
+                            }],
 
-                      </ButtonGroup>
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+                            labels: [
+                              'Грусть',
+                              'Печаль',
+                              'Радость'
+                            ]
+                          }}>
+
+                          </Doughnut>
+                        </CardBody>
+                      </Card>
                     </Col>
-                    <Col md={12} lg={9}>
+                    <Col md={12} lg={4}>
+                      <Card className='card-shadow'>
+                        <CardBody>
+                          <Card>
+                            <CardBody style={{padding: '0'}}>
+                              <h5>
+                                Самый заинтересованный
+                              </h5>
+                              <CardTitle>Николай Иванович</CardTitle>
+                                <Bar
+                                  data={this.getChartDataset(
+                                    [-1,-3,1,0,3,-1,0,2,1,0],
+                                  )}
+                                  options={lineOptions}
+                                >
+                                </Bar>
+                            </CardBody>
+                          </Card>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                    <Col md={12} lg={4}>
+                      <Card className='card-shadow'>
+                        <CardBody>
+                          <Card>
+                            <CardBody style={{padding: '0'}}>
+                              <h5>
+                                Наименее заинтересованный
+                              </h5>
+                              <CardTitle>Николай Николаевич</CardTitle>
+                                <Bar
+                                  data={this.getChartDataset(
+                                    [1,2,3,3,3,-1,0,2,1,0,],
+                                    'rgba(255,100,100,{})',
+                                  )}
+                                  options={lineOptions}
+                                >
+                                </Bar>
+                            </CardBody>
+                          </Card>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row style={{marginTop: '2rem'}}>
+                    <Col md={12} lg={12}>
                       <div className='card__title'>
-                        <h5 className='bold-text'>My lessons</h5>
+                        <h5 className='bold-text'>Students</h5>
                       </div>
                       <Table borderless hover>
                         <thead>
                         <tr>
-                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) ||'Не выбрана'}</th>
+                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) || 'Не выбрана'}</th>
                           <th>
                             <ClockIcon/>
                           </th>
@@ -264,7 +303,8 @@ class LessonSingle extends React.Component {
                                 <Progress multi>
                                   {
                                     student.emotions.map(emotion =>
-                                      <Progress key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`} bar color={this.colorByEmotion(emotion.type)} value={emotion.value}/>
+                                      <Progress key={`${emotion.type}#${emotion.value}#${Math.random() * 1000}`} bar
+                                                color={this.colorByEmotion(emotion.type)} value={emotion.value}/>
                                     )
                                   }
                                 </Progress>
@@ -297,9 +337,7 @@ class LessonSingle extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {
-
-  };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
