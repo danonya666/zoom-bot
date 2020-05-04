@@ -285,7 +285,10 @@ class LessonSingle extends React.Component {
                         <tr>
                           <th colSpan={3}>{(this.activeNode && this.activeNode.title) || 'Не выбрана'}</th>
                           <th>
-                            <ClockIcon/>
+                            <ClockIcon color="#DC3545" id="clock-tooltip" />
+                            <UncontrolledTooltip placement="top" target="clock-tooltip">
+                              Время отсутствия в кадре
+                            </UncontrolledTooltip>
                           </th>
                         </tr>
                         </thead>
