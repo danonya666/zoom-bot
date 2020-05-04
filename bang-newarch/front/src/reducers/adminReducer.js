@@ -24,7 +24,6 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case USERS_FETCHED:
-      console.log('data', action.data);
       return {
         ...state,
         userList: action.data,

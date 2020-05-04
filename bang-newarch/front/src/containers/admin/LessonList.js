@@ -185,14 +185,16 @@ class LessonList extends React.Component {
     let newStudents = [];
     for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
+      Math.random() > 0.5 ?
       newStudents.push({
         ...student,
         photo: img,
-      });
+      }) : 1;
     }
     this.setState({
       cool_students: newStudents,
     })
+    return newStudents
   }
 
   onSetActiveNode(id) {
@@ -202,7 +204,9 @@ class LessonList extends React.Component {
     this.setState({
       activeNodeId: id,
     })
-    console.log(this.state.cool_students);
+    const updatedCoolStudents = this.setStudentsRandomPhotos();
+    console.log('uCS', updatedCoolStudents);
+    this.setState({ cool_students: updatedCoolStudents });
   }
 
 
@@ -278,7 +282,6 @@ class LessonList extends React.Component {
                             ?this.state.cool_students.map(student =>
                               {
                                 const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
-                                console.log('studentttt', student.lessons[0]);
                                 return <tr key={student.id}>
                                   <td style={{width: '84px'}}>
                                     <Media src={student.photo} width={64} height={64}/>
