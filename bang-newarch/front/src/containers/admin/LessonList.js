@@ -35,6 +35,7 @@ import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
 import {loadTemplateList} from "../../actions/templates";
+import { format, formatDistance, formatRelative, subDays, subSeconds, subMinutes } from 'date-fns'
 
 class LessonList extends React.Component {
   state = {
@@ -138,18 +139,24 @@ class LessonList extends React.Component {
     }
   }
 
+  dif(emotion) {
+    const t1 = new Date(emotion.end_time)
+    const t2 = new Date(emotion.start_time)
+    return Math.abs((t1.getTime() - t2.getTime()) / 1000)
+  }
+
   colorByEmotion(emotion) {
     switch(emotion) {
-      case 'angry':
-      case 'sad':
+      case 'AY':
+      case 'SD':
         return 'danger';
-      case 'happy':
-      case 'surprised':
+      case 'HP':
+      case 'SP':
         return 'success';
-      case 'disgust':
-      case 'scared':
+      case 'DG':
+      case 'SC':
         return 'warning';
-      case 'neutral':
+      case 'NT':
         return 'info';
       default:
         return 'info';
@@ -261,32 +268,42 @@ class LessonList extends React.Component {
                               // && this.state.activeNodeId
                           )
                             ?this.state.cool_students.map(student =>
-                            <tr key={student.id}>
-                              <td style={{width: '84px'}}>
-                                <Media src={student.photo} width={64} height={64}/>
-                              </td>
-                              <td style={{width: '250px'}}>
-                                <b>{student.first_name + " " + student.last_name}</b>
-                              </td>
-                              <td>
-                                <Progress multi>
-                                  {
-                                    student.lessons[0].emotions.map(emotion =>
-                                      <Progress
-                                        key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`}
-                                        bar
-                                        color={this.colorByEmotion(emotion.type)}
-                                        value={emotion.value}
-                                      />
-                                    )
-                                  }
-                                </Progress>
-                              </td>
+                              {
+                                const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
+                                console.log('studentttt', student.lessons[0]);
+                                return <tr key={student.id}>
+                                  <td style={{width: '84px'}}>
+                                    <Media src={student.photo} width={64} height={64}/>
+                                  </td>
+                                  <td style={{width: '250px'}}>
+                                    <b>{student.first_name + " " + student.last_name}</b>
+                                  </td>
+                                  <td>
+                                    <Progress multi>
+                                      {
+                                        student.lessons[0].emotions.map(emotion =>
+                                        {
+                                          const value = this.dif(emotion) / fullLength * 100
+                                          console.log('value', emotion);
+                                          return <Progress
+                                              key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
+                                              bar
+                                              color={this.colorByEmotion(emotion.emotion_type)}
+                                              value={value}
+                                          />
+                                        }
 
-                              <td style={{width: '84px'}}>
-                                {student.time}
-                              </td>
-                            </tr>
+                                        )
+                                      }
+                                    </Progress>
+                                  </td>
+
+                                  <td style={{width: '84px'}}>
+                                    {student.time}
+                                  </td>
+                                </tr>
+                              }
+
                           ):<p className="text-center my-4">Нет студентов</p>
                         }
                         </tbody>
