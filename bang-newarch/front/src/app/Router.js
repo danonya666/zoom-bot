@@ -23,7 +23,7 @@ import Waiting from '../containers/Waiting'
 import NotLogged from '../containers/NotLogged'
 import AddBatch from '../containers/admin/AddBatch'
 import LessonList from '../containers/admin/LessonList'
-import TemplateList from '../containers/admin/ClassList'
+import ClassList from '../containers/admin/ClassList'
 import TemplateInfo from '../containers/admin/TemplateInfo'
 import AddTemplate from '../containers/admin/AddClass'
 import SurveyList from '../containers/admin/SurveyList'
@@ -56,7 +56,7 @@ const MainRouter = (props) => {
           <Route exact path='/batches-add' component={AddBatch}/>
           <Route exact path='/lessons' component={LessonList}/>
           <Route path='/batches/:id' component={BatchResult}/>
-          <Route exact path='/templates' component={TemplateList}/>
+          <Route exact path='/classes' component={ClassList}/>
           <Route exact path='/templates-add' component={AddTemplate}/>
           <Route path='/templates/:id' component={TemplateInfo}/>
           <Route exact path='/surveys' component={SurveyList}/>
