@@ -1,17 +1,17 @@
 /** router.js
  *  front-end
- * 
+ *
  *  controls what view components are displayed based on route
- *  
+ *
  *  controlled by (logic for unauthorized access is handled by):
  *    1. src/actions/app.js
- *  
- *  controls:  
+ *
+ *  controls:
  *    1. throughout
- * 
+ *
  *  called by:
  *    1. App.js
- *    
+ *
  */
 
 import React from 'react';
@@ -22,7 +22,7 @@ import Batch from '../containers/Batch'
 import Waiting from '../containers/Waiting'
 import NotLogged from '../containers/NotLogged'
 import AddBatch from '../containers/admin/AddBatch'
-import BatchList from '../containers/admin/BatchList'
+import LessonList from '../containers/admin/LessonList'
 import TemplateList from '../containers/admin/ClassList'
 import TemplateInfo from '../containers/admin/TemplateInfo'
 import AddTemplate from '../containers/admin/AddClass'
@@ -47,14 +47,14 @@ const MainRouter = (props) => {
 
   return appReady ? (
     <MainWrapper>
-      <main> 
+      <main>
         <Switch>
           <Route exact path='/home' component={Home} />
           <Route exact path='/waiting' component={Waiting}/>
           <Route exact path='/batch' component={Batch}/>
           <Route exact path='/batch-end' component={BatchEnd}/>
           <Route exact path='/batches-add' component={AddBatch}/>
-          <Route exact path='/batches' component={BatchList}/>
+          <Route exact path='/lessons' component={LessonList}/>
           <Route path='/batches/:id' component={BatchResult}/>
           <Route exact path='/templates' component={TemplateList}/>
           <Route exact path='/templates-add' component={AddTemplate}/>
