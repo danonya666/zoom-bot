@@ -239,12 +239,12 @@ class LessonList extends React.Component {
                     </Col>
                     <Col md={12} lg={9}>
                       <div className='card__title'>
-                        <h5 className='bold-text'>My lessons</h5>
+                        <h5 className='bold-text'>Students</h5>
                       </div>
                       <Table borderless hover>
                         <thead>
                         <tr>
-                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) ||'Не выбрана'}</th>
+                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) ||'Не выбран урок'}</th>
                           <th>
                             <ClockIcon/>
                           </th>
@@ -252,7 +252,8 @@ class LessonList extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          this.state.students.map(student =>
+                          (this.state.students && this.state.students.length > 0 && this.state.activeNodeId)
+                            ?this.state.students.map(student =>
                             <tr key={student.id}>
                               <td style={{width: '84px'}}>
                                 <Media src={student.photo} width={64} height={64}/>
@@ -264,7 +265,12 @@ class LessonList extends React.Component {
                                 <Progress multi>
                                   {
                                     student.emotions.map(emotion =>
-                                      <Progress key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`} bar color={this.colorByEmotion(emotion.type)} value={emotion.value}/>
+                                      <Progress
+                                        key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`}
+                                        bar
+                                        color={this.colorByEmotion(emotion.type)}
+                                        value={emotion.value}
+                                      />
                                     )
                                   }
                                 </Progress>
@@ -274,7 +280,7 @@ class LessonList extends React.Component {
                                 {student.time}
                               </td>
                             </tr>
-                          )
+                          ):<p className="text-center my-4">Нет студентов</p>
                         }
                         </tbody>
                       </Table>
