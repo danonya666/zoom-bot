@@ -24,10 +24,10 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case USERS_FETCHED:
+      console.log('data', action.data);
       return {
         ...state,
         userList: action.data,
-        willbangLength: action.data.filter(x => x.systemStatus === 'willbang' && !x.isTest).length
       };
     case USER_DELETED:
       let deletedUserList = state.userList.slice();

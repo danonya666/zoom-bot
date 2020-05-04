@@ -54,8 +54,8 @@ export function addBatch(batch) {
           type: BATCH_ADDED,
           data: response.data.batch,
         });
-        dispatch(setSnackbar("Batch was added"));
-        history.push("/batches");
+        dispatch(setSnackbar("Lesson was added"));
+        history.push("/lessons");
       })
       .catch((err) => {
         errorCatcher(err, dispatch);
@@ -230,15 +230,16 @@ export function loadUserList(params) {
   return (dispatch) => {
     dispatch(setLoading(true));
 
-    return axios({
+    return axiosP({
       method: "get",
-      url: "admin/users/",
+      url: "student/",
     })
       .then((response) => {
+          console.log('response: ', response);
         dispatch(setLoading(false));
         dispatch({
           type: USERS_FETCHED,
-          data: response.data.users,
+          data: response.data,
         });
       })
       .catch((err) => {

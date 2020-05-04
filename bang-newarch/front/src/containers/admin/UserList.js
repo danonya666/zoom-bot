@@ -154,8 +154,8 @@ class UserList extends React.Component {
                               {(this.state.page - 1) * pageSize + index + 1}
                             </td>
                             {/*<td>{user.mturkId}</td>*/}
-                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.lastName + " " + user.name}</td>
-                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.className}</td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.first_name + " " + user.last_name}</td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.klass.name}</td>
                             <td onClick={() => {history.push('/users/' + user.id)}}>{user.connected ? "yes" : "no"}</td>
                             <td onClick={() => {history.push('/users/' + user.id)}}>${user.totalBonuses}</td>
                           </tr>

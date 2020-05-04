@@ -1,6 +1,6 @@
 import {default as axiosBase} from 'axios';
 export const API_BASE = process.env.API_HOST.toString().replace(/"/g, ``) + 'api/';
-export const API_NEW = 'http://localhost:8000'
+export const API_NEW = 'http://localhost:8000/api/v1/'
 export const axios = axiosBase.create({
   baseURL: API_BASE,
   // baseURL: API_NEW,
