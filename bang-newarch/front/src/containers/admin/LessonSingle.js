@@ -131,7 +131,7 @@ class LessonSingle extends React.Component {
     let newStudents = [];
     for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
-      Math.random() > 0.5 ?
+      Math.random() > 0.2 ?
           newStudents.push({
             ...student,
             photo: img,
@@ -318,6 +318,7 @@ class LessonSingle extends React.Component {
                         {
                           this.state.cool_students.map(student =>
                           {
+                            console.log('student', student)
                             const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
                             return <tr key={student.id}>
                               <td style={{width: '84px'}}>
@@ -342,7 +343,8 @@ class LessonSingle extends React.Component {
                               </td>
 
                               <td>
-                                {student.time}
+                                {student.lessons[0].actions && student.lessons[0].actions.length ?
+                                (student.lessons[0].actions.map(x => this.dif(x)).reduce((a,b) => a+b) / 60).toFixed(0): 0}
                               </td>
                             </tr>
                           }
