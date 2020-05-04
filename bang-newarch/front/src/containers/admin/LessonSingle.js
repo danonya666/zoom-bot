@@ -308,7 +308,7 @@ class LessonSingle extends React.Component {
                               }
                             </div>
                           </th>
-                          <th>
+                          <th style={{width: '100px'}}>
                             <ClockIcon color="#DC3545" id="clock-tooltip" />
                             <UncontrolledTooltip placement="top" target="clock-tooltip">
                               Время отсутствия в кадре
@@ -337,7 +337,7 @@ class LessonSingle extends React.Component {
                                 </Progress>
                               </td>
 
-                              <td style={{width: '84px'}}>
+                              <td>
                                 {student.time}
                               </td>
                             </tr>

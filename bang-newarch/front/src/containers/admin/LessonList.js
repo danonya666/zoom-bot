@@ -174,7 +174,7 @@ class LessonList extends React.Component {
     setTimeout(() => {
       this.setState({
         isReady: true,
-      })
+      });
     }, Math.random() * 2500)
     this.props.loadUserList().then(() => {
       this.setStudentsRandomPhotos().then(r => {});
@@ -235,7 +235,7 @@ class LessonList extends React.Component {
                 <CardBody>
                   <Row>
                     <Col md={12} lg={3}>
-                      <div className='card__title'>
+                      <div className='card__title' style={{height: '50px'}}>
                         <h5 className='bold-text'>My lessons</h5>
                       </div>
                       <ButtonGroup vertical style={{width: '100%'}}>
@@ -269,7 +269,7 @@ class LessonList extends React.Component {
                       </ButtonGroup>
                     </Col>
                     <Col md={12} lg={9}>
-                      <div className='card__title'>
+                      <div className='card__title' style={{height: '50px'}}>
                         <div className='text-right'>
                           <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>
                             <PlusIcon size={24} />
@@ -303,7 +303,7 @@ class LessonList extends React.Component {
                             }
 
                           </th>
-                          <th>
+                          <th style={{width: '100px'}}>
                             <ClockIcon color="#DC3545" id="clock-tooltip" />
                             <UncontrolledTooltip placement="top" target="clock-tooltip">
                               Время отсутствия в кадре
