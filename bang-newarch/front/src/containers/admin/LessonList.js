@@ -25,7 +25,7 @@ import {
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {loadBatchResult} from 'Actions/admin'
+import { loadBatchResult, loadUserList } from 'Actions/admin'
 import Select from "react-select";
 import Chat from '../Chat'
 import moment from "moment";
@@ -34,7 +34,8 @@ import RoundSurveyForm from "../RoundSurveyForm";
 import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
-import {history} from "../../app/history";
+import {loadTemplateList} from "../../actions/templates";
+import { format, formatDistance, formatRelative, subDays, subSeconds, subMinutes } from 'date-fns'
 
 class LessonList extends React.Component {
   state = {
@@ -123,7 +124,8 @@ class LessonList extends React.Component {
         time: '15m',
         id: 2,
       },
-    ]
+    ],
+    cool_students: [],
   }
 
   get activeNode() {
@@ -137,18 +139,24 @@ class LessonList extends React.Component {
     }
   }
 
+  dif(emotion) {
+    const t1 = new Date(emotion.end_time)
+    const t2 = new Date(emotion.start_time)
+    return Math.abs((t1.getTime() - t2.getTime()) / 1000)
+  }
+
   colorByEmotion(emotion) {
     switch(emotion) {
-      case 'angry':
-      case 'sad':
+      case 'AY':
+      case 'SD':
         return 'danger';
-      case 'happy':
-      case 'surprised':
+      case 'HP':
+      case 'SP':
         return 'success';
-      case 'disgust':
-      case 'scared':
+      case 'DG':
+      case 'SC':
         return 'warning';
-      case 'neutral':
+      case 'NT':
         return 'info';
       default:
         return 'info';
@@ -167,13 +175,15 @@ class LessonList extends React.Component {
         isReady: true,
       })
     }, Math.random() * 2500)
-
-    this.setStudentsRandomPhotos();
+    this.props.loadUserList().then(() => {
+      this.setStudentsRandomPhotos().then(r => {});
+    });
   }
 
   async setStudentsRandomPhotos() {
+    console.log('aaa')
     let newStudents = [];
-    for(const student of this.state.students) {
+    for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
       newStudents.push({
         ...student,
@@ -181,7 +191,7 @@ class LessonList extends React.Component {
       });
     }
     this.setState({
-      students: newStudents,
+      cool_students: newStudents,
     })
   }
 
@@ -196,6 +206,7 @@ class LessonList extends React.Component {
 
 
   render() {
+    console.log('usreList', this.state.cool_students);
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>
@@ -257,34 +268,46 @@ class LessonList extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          (this.state.students && this.state.students.length > 0 && this.state.activeNodeId)
-                            ?this.state.students.map(student =>
-                            <tr key={student.id}>
-                              <td style={{width: '84px'}}>
-                                <Media src={student.photo} width={64} height={64}/>
-                              </td>
-                              <td style={{width: '250px'}}>
-                                <b>{student.fullName}</b>
-                              </td>
-                              <td>
-                                <Progress multi>
-                                  {
-                                    student.emotions.map(emotion =>
-                                      <Progress
-                                        key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`}
-                                        bar
-                                        color={this.colorByEmotion(emotion.type)}
-                                        value={emotion.value}
-                                      />
-                                    )
-                                  }
-                                </Progress>
-                              </td>
+                          (this.state.cool_students && this.state.cool_students.length > 0
+                              // && this.state.activeNodeId
+                          )
+                            ?this.state.cool_students.map(student =>
+                              {
+                                const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
+                                console.log('studentttt', student.lessons[0]);
+                                return <tr key={student.id}>
+                                  <td style={{width: '84px'}}>
+                                    <Media src={student.photo} width={64} height={64}/>
+                                  </td>
+                                  <td style={{width: '250px'}}>
+                                    <b>{student.first_name + " " + student.last_name}</b>
+                                  </td>
+                                  <td>
+                                    <Progress multi>
+                                      {
+                                        student.lessons[0].emotions.map(emotion =>
+                                        {
+                                          const value = this.dif(emotion) / fullLength * 100
+                                          console.log('value', emotion);
+                                          return <Progress
+                                              key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
+                                              bar
+                                              color={this.colorByEmotion(emotion.emotion_type)}
+                                              value={value}
+                                          />
+                                        }
 
-                              <td style={{width: '84px'}}>
-                                {student.time}
-                              </td>
-                            </tr>
+                                        )
+                                      }
+                                    </Progress>
+                                  </td>
+
+                                  <td style={{width: '84px'}}>
+                                    {student.time}
+                                  </td>
+                                </tr>
+                              }
+
                           ):<p className="text-center my-4">Нет студентов</p>
                         }
                         </tbody>
@@ -309,12 +332,17 @@ class LessonList extends React.Component {
 
 function mapStateToProps(state) {
   return {
-
+    userList: state.admin.userList,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return bindActionCreators(
+      {
+        loadUserList,
+      },
+      dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonList);
