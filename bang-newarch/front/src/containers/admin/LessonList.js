@@ -25,7 +25,7 @@ import {
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {loadBatchResult} from 'Actions/admin'
+import { loadBatchResult, loadUserList } from 'Actions/admin'
 import Select from "react-select";
 import Chat from '../Chat'
 import moment from "moment";
@@ -34,6 +34,7 @@ import RoundSurveyForm from "../RoundSurveyForm";
 import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
+import {loadTemplateList} from "../../actions/templates";
 
 class LessonList extends React.Component {
   state = {
@@ -168,6 +169,8 @@ class LessonList extends React.Component {
     }, Math.random() * 2500)
 
     this.setStudentsRandomPhotos();
+    this.props.loadUserList();
+
   }
 
   async setStudentsRandomPhotos() {
@@ -195,6 +198,7 @@ class LessonList extends React.Component {
 
 
   render() {
+    console.log('usreList', this.props.userList);
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>
@@ -252,19 +256,21 @@ class LessonList extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          (this.state.students && this.state.students.length > 0 && this.state.activeNodeId)
-                            ?this.state.students.map(student =>
+                          (this.props.userList && this.props.userList.length > 0
+                              // && this.state.activeNodeId
+                          )
+                            ?this.props.userList.map(student =>
                             <tr key={student.id}>
                               <td style={{width: '84px'}}>
-                                <Media src={student.photo} width={64} height={64}/>
+                                {/*<Media src={student.photo} width={64} height={64}/>*/}
                               </td>
                               <td style={{width: '250px'}}>
-                                <b>{student.fullName}</b>
+                                <b>{student.first_name + " " + student.last_name}</b>
                               </td>
                               <td>
                                 <Progress multi>
                                   {
-                                    student.emotions.map(emotion =>
+                                    student.lessons[0].emotions.map(emotion =>
                                       <Progress
                                         key={`${emotion.type}#${emotion.value}#${Math.random()*1000}`}
                                         bar
@@ -304,12 +310,17 @@ class LessonList extends React.Component {
 
 function mapStateToProps(state) {
   return {
-
+    userList: state.admin.userList,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return bindActionCreators(
+      {
+        loadUserList,
+      },
+      dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonList);
