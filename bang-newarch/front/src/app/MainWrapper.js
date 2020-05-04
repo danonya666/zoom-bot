@@ -49,12 +49,13 @@ class MainWrapper extends PureComponent {
           <div className="wrapper">
             {user && !!user.isAdmin && (
               <Navbar
-                color="dark"
+                color="white"
                 dark
                 expand="xl"
                 className="topbar-main fixed-top"
               >
                 <Container fluid className="justify-content-md-start">
+                  <img src={require('../img/ZoomLogo.png')} className="header-logo"/>
                   <Link className="topbar__collapse-link" to="/home">
                     home
                   </Link>
