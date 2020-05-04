@@ -86,6 +86,7 @@ const lineOptions = {
 }
 
 class LessonSingle extends React.Component {
+  TIMER_INT = 5
   state = {
     isReady: false,
     lesson: {
@@ -97,6 +98,19 @@ class LessonSingle extends React.Component {
 
     ],
     cool_students: [],
+    timer: this.TIMER_INT,
+  }
+
+  tick = () => {
+    console.log('ticking', this.state.timer)
+    this.setState(state => ({
+      timer: state.timer - 1
+    }));
+    if (this.state.timer <= 0) {
+      console.log('loading users')
+      this.props.loadUserList();
+      this.state.timer = this.TIMER_INT;
+    }
   }
 
   colorByEmotion(emotion) {
@@ -124,10 +138,10 @@ class LessonSingle extends React.Component {
       })
       this.props.loadUserList().then(t => this.setStudentsRandomPhotos().then(t => {}));
     }, Math.random() * 2500)
+    setInterval(this.tick, 1000)
   }
 
   async setStudentsRandomPhotos() {
-    console.log('aaa')
     let newStudents = [];
     for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
@@ -318,7 +332,6 @@ class LessonSingle extends React.Component {
                         {
                           this.state.cool_students.map(student =>
                           {
-                            console.log('student', student)
                             const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
                             return <tr key={student.id}>
                               <td style={{width: '84px'}}>
