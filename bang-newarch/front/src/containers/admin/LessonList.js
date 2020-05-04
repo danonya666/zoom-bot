@@ -36,6 +36,7 @@ import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
 import {loadTemplateList} from "../../actions/templates";
 import { history } from "../../app/history";
+import PlusIcon from "mdi-react/PlusIcon";
 
 class LessonList extends React.Component {
   state = {
@@ -269,7 +270,12 @@ class LessonList extends React.Component {
                     </Col>
                     <Col md={12} lg={9}>
                       <div className='card__title'>
-                        <h5 className='bold-text'>Students</h5>
+                        <div className='text-right'>
+                          <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>
+                            <PlusIcon size={24} />
+                          </Button>
+
+                        </div>
                       </div>
                       <Table borderless hover>
                         <thead>
