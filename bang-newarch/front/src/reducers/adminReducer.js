@@ -10,6 +10,7 @@ import {
   SWITCH_EMPTY_BATCHES_VISIBILITY,
   BONUS_PAID,
   LOGS_FETCHED,
+  ZOOM_LINK_FETCHED, CAPTCHA_FETCHED
 } from "../actions/admin";
 
 const initialState = {
@@ -102,6 +103,17 @@ export default function (state = initialState, action) {
         ...state,
         logs: action.data.logs,
         errorLogs: action.data.errorLogs,
+      }
+    case ZOOM_LINK_FETCHED:
+      console.log("action data", action.data)
+      return {
+        ...state,
+        zoomLink: action.data.zoomLink,
+      }
+    case CAPTCHA_FETCHED:
+      return {
+        ...state,
+        captcha: action.data,
       }
     default:
       return state;

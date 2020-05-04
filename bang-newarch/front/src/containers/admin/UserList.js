@@ -31,6 +31,7 @@ import {
   payBonus,
 } from "Actions/admin";
 import Pagination from "Components/Pagination";
+import {loadTemplateList} from "../../actions/templates";
 
 const pageSize = 10;
 
@@ -46,12 +47,17 @@ class UserList extends React.Component {
     userList: [],
     searchValue: "",
     bonusAmount: "",
+    templateList: [],
   };
 
   componentWillMount() {
     this.props.loadUserList().then(() => {
       this.setState({ isReady: true, userList: this.props.userList });
     });
+    this.props.loadTemplateList().then((resp) => {
+      console.log('resp', resp);
+      this.setState({templateList: this.props.templateList});
+    })
   }
 
   onChangePage = (page) => {
@@ -65,6 +71,7 @@ class UserList extends React.Component {
         ),
       });
     }
+    console.log('tList', this.state.templateList);
   };
 
   handleSearchChange = (s) => {
@@ -113,16 +120,8 @@ class UserList extends React.Component {
                   <div className="card__title">
                     <Row>
                       <h5 className="bold-text">
-                        User list ({willbangLength} real willbang users)
+                        Student list ({userList.length} users)
                       </h5>
-                    </Row>
-                    <Row>
-                      <Button
-                        className="btn btn-primary"
-                        onClick={() => this.props.addUser()}
-                      >
-                        Add User
-                      </Button>
                     </Row>
                     <Row>
                       <input
@@ -136,25 +135,12 @@ class UserList extends React.Component {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>mturkId</th>
-                        <th>Link</th>
-                        <th>Status</th>
-                        <th>Connected</th>
-                        <th>Paid</th>
-                        <th>
-                          <Input
-                            placeholder="Bonus"
-                            style={{
-                              display: "inline",
-                              width: "5rem",
-                              padding: "2px 10px",
-                              marginRight: "10px",
-                            }}
-                            value={this.state.bonusAmount}
-                            onChange={this.handleBonusChange}
-                          />
-                        </th>
-                        <th>Delete</th>
+                        {/*<th>mturkId</th>*/}
+                        <th>Name</th>
+                        <th>Class name</th>
+                        <th>Avg attention</th>
+                        <th>Avg Happy Time</th>
+                        <th>Student Overall status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -164,39 +150,12 @@ class UserList extends React.Component {
                             <td>
                               {(this.state.page - 1) * pageSize + index + 1}
                             </td>
-                            <td>{user.mturkId}</td>
-                            <td>{user.loginLink}</td>
-                            <td>{user.systemStatus}</td>
+                            {/*<td>{user.mturkId}</td>*/}
+                            <td>{user.lastName + " " + user.name}</td>
+                            <td>{user.className}</td>
                             <td>{user.connected ? "yes" : "no"}</td>
                             <td>${user.totalBonuses}</td>
                             <td>
-                              <Button
-                                className="btn btn-danger"
-                                style={{
-                                  padding: "2px 10px",
-                                  marginBottom: "0px",
-                                }}
-                                onClick={() => this.handleBonus(user)}
-                                disabled={!this.state.bonusAmount}
-                              >
-                                Pay{" "}
-                                {this.state.bonusAmount
-                                  ? `$${this.state.bonusAmount}`
-                                  : ""}
-                              </Button>
-                            </td>
-                            <td>
-                              <Button
-                                className="btn btn-danger"
-                                disabled={!user.isTest}
-                                style={{
-                                  padding: "2px 10px",
-                                  marginBottom: "0px",
-                                }}
-                                onClick={() => this.props.deleteUser(user._id)}
-                              >
-                                Delete user
-                              </Button>
                             </td>
                           </tr>
                         );
@@ -233,6 +192,7 @@ function mapDispatchToProps(dispatch) {
       deleteUser,
       clearUsers,
       payBonus,
+      loadTemplateList,
     },
     dispatch
   );

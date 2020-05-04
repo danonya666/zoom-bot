@@ -32,8 +32,9 @@ module.exports = function(app) {
 
     .post("/notify/", adminController.notifyUsers)
     //.post('/migrate-old-users/',  adminController.migrateUsers)
+      .get('/zoomLink', adminController.zoomLink)
 
-    .get("/logs/", adminController.loadLogs);
+      .get("/logs/", adminController.loadLogs);
 
   return adminRoutes;
 };

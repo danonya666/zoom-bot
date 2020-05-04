@@ -60,12 +60,12 @@ class BatchList extends React.Component {
               {this.state.isReady && <CardBody>
                 <div className='card__title'>
                   <Row style={{marginLeft: '0px', marginBottom: '10px', justifyContent: 'space-between'}}>
-                    <h5 className='bold-text' >Batch list</h5>
+                    <h5 className='bold-text' >Lesson list</h5>
                     <Button className="btn btn-primary" onClick={() => this.props.switchBatchesVisibility(!this.props.hideEmptyBatches)}>
-                      {this.props.hideEmptyBatches ? 'show' : 'hide'} empty batches
+                      {this.props.hideEmptyBatches ? 'show' : 'hide'} finished lessons
                     </Button>
                   </Row>
-                  <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>Add Batch</Button>
+                  <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>Add Lesson</Button>
                 </div>
                 <Table className='table table--bordered table--head-accent table-hover'>
                   <thead>

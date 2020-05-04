@@ -23,9 +23,9 @@ import Waiting from '../containers/Waiting'
 import NotLogged from '../containers/NotLogged'
 import AddBatch from '../containers/admin/AddBatch'
 import BatchList from '../containers/admin/BatchList'
-import TemplateList from '../containers/admin/TemplateList'
+import TemplateList from '../containers/admin/ClassList'
 import TemplateInfo from '../containers/admin/TemplateInfo'
-import AddTemplate from '../containers/admin/AddTemplate'
+import AddTemplate from '../containers/admin/AddClass'
 import SurveyList from '../containers/admin/SurveyList'
 import SurveyInfo from '../containers/admin/SurveyInfo'
 import AddSurvey from '../containers/admin/AddSurvey'
@@ -37,6 +37,7 @@ import BatchEnd from '../containers/BatchEnd'
 import Unsubscribe from '../containers/Unsubscribe'
 import Kicked from "../containers/Kicked";
 import Logs from "../containers/admin/Logs";
+import Home from "../containers/admin/Home";
 
 const MainRouter = (props) => {
   const {user, appReady} = props;
@@ -48,6 +49,7 @@ const MainRouter = (props) => {
     <MainWrapper>
       <main> 
         <Switch>
+          <Route exact path='/home' component={Home} />
           <Route exact path='/waiting' component={Waiting}/>
           <Route exact path='/batch' component={Batch}/>
           <Route exact path='/batch-end' component={BatchEnd}/>

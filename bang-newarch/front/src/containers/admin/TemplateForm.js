@@ -4,7 +4,7 @@
  *  admin only layout for adding / editing (validating) a template
  *
  *  called by:
- *    1. AddTemplate.js
+ *    1. AddClass.js
  *    2. EditTemplate.js (empty, code scrap)
  *    3. TemplateInfo.js
  */
@@ -424,106 +424,56 @@ const renderReadingPeriods = ({fields, meta: {touched, error, warning}, numRound
 
 const renderCases = ({fields, meta: {touched, error, warning}, numRounds}) => {
   return (<div style={{width: '100%', borderBottom: '1px solid grey', marginTop: '20px'}}>
-    <p>Cases</p>
+    <h3>Students</h3>
     <br/>
     {
       fields.map((case_, index) => {
         return (
-            <Row key={index}>
-              <h3>Case {index + 1}</h3>
+            <div key={index}>
               <Col>
-                  <Row>
-                    <Col>
-                        <p>Version 1, Part 1</p>
-                      <Row>
+                    {/*<div className='form__form-group'>*/}
+                    <Row>
+                        <p>Name</p>
+                    </Row>
+                      <Row style={{marginTop: '5px'}}>
                           <Field
-                              name={`cases[${index}].versions[0].parts[0].text`}
+                              name={`cases[${index}].name`}
                               type="text"
-                              component={renderTextArea}
+                              component={renderField}
                           />
                       </Row>
-                    </Col>
-                    <Col>
-                      <p>Reading time</p>
+                    <Row style={{marginTop: '5px'}}>
+                      <p>Last Name</p>
                       <Field
-                          name={`cases[${index}].versions[0].parts[0].time`}
+                          name={`cases[${index}].lastName`}
                           type="text"
                           component={renderField}
                       />
-                    </Col>
-                  </Row>
-                <Row>
-                  <Col>
-                    <p>Version 1, Part 2</p>
-                    <Row>
-                      <Field
-                          name={`cases[${index}].versions[0].parts[1].text`}
-                          type="text"
-                          component={renderTextArea}
-                      />
                     </Row>
-                  </Col>
-                  <Col>
-                    <p>Reading time</p>
-                    <Field
-                        name={`cases[${index}].versions[0].parts[1].time`}
-                        type="number"
-                        component={renderField}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <p>Version 2, Part 1</p>
-                    <Row>
-                      <Field
-                          name={`cases[${index}].versions[1].parts[0].text`}
-                          type="text"
-                          component={renderTextArea}
-                      />
-                    </Row>
-                  </Col>
-                  <Col>
-                    <p>Reading time</p>
-                    <Field
-                        name={`cases[${index}].versions[1].parts[0].time`}
-                        type="number"
-                        component={renderField}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <p>Version 2, Part 2</p>
-                    <Row>
-                      <Field
-                          name={`cases[${index}].versions[1].parts[1].text`}
-                          type="text"
-                          component={renderTextArea}
-                      />
-                    </Row>
-                  </Col>
-                  <Col>
-                    <p>Reading time</p>
-                    <Field
-                        name={`cases[${index}].versions[1].parts[1].time`}
-                        type="text"
-                        component={renderField}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col>
+                      <Row style={{marginTop: '5px'}}>
+                        <p>email</p>
+                        <Field
+                            name={`cases[${index}].email`}
+                            type="text"
+                            component={renderField}
+                        />
+                      </Row>
+                    {/*</div>*/}
+              <Row>
                 <div className='centered-and-flexed'>
                   <Button type="button" size="sm"
-                          onClick={() => fields.splice(index, 1)}>delete case</Button>
+                          onClick={() => fields.splice(index, 1)}
+                          style={{marginTop: '5px'}}>
+                    delete student
+                  </Button>
                 </div>
+              </Row>
               </Col>
-            </Row>)
+            </div>)
       })}
     <Row className="centered-and-flexed" noGutters>
       <Button type="button" size="sm" onClick={() => fields.push({})}>
-        <i className="fa fa-plus"/>add case
+        <i className="fa fa-plus"/>add student
       </Button>
     </Row>
   </div>)
@@ -785,39 +735,6 @@ class TemplateForm extends React.Component {
           <Row>
             <Col><div className='form__panel'>
             <div className='form__panel-body' style={{borderBottom: '3px solid grey'}}>
-              <Row style={{paddingBottom: '10px'}}>
-                <input type="file" name="json" id="json" onChange={this.handleFileUpload} />
-              </Row>
-              <Row>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Team Format:</label>
-                    <Field
-                      name='teamFormat'
-                      component={renderSelectField}
-                      options={[{value: 'single', label: 'Single-team'}, {value: 'multi', label: 'Multi-team'}]}
-                    />
-                </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Post Survey:</label>
-                  <div className='form__form-group-select'>
-                  <Field
-                      name={`hasPostSurvey`}
-                      component={renderCheckBoxField}
-                      onChange={(e) => {this.deleteSurvey(e, numRounds - 1, 'postSurvey')}}
-                  />
-                  </div>
-                </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Pre Survey:</label>
-                  <div className='form__form-group-select'>
-                    <Field
-                        name={`hasPreSurvey`}
-                        component={renderCheckBoxField}
-                        onChange={(e) => {this.deleteSurvey(e, numRounds - 1, 'preSurvey')}}
-                    />
-                  </div>
-                </Col>
-              </Row>
               <Row>
                 <Col className='form__form-group'>
                   <label className='form__form-group-label'>Name:</label>
@@ -829,70 +746,6 @@ class TemplateForm extends React.Component {
                     />
                   </div>
                 </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Team size:</label>
-                  <div className='form__form-group-field'>
-                    <Field
-                      name='teamSize'
-                      component={renderField}
-                      type='number'
-                    />
-                  </div>
-                </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Number of rounds:</label>
-                  <div className='form__form-group-field'>
-                    <Field
-                      name='numRounds'
-                      component={renderField}
-                      type='number'
-                      onChange={this.numRoundsChange}
-                    />
-                  </div>
-                </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Round minutes:</label>
-                  <div className='form__form-group-field'>
-                    <Field
-                      name='roundMinutes'
-                      component={renderField}
-                      type='number'
-                    />
-                  </div>
-                </Col>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Survey minutes:</label>
-                  <div className='form__form-group-field'>
-                    <Field
-                      name='surveyMinutes'
-                      component={renderField}
-                      type='number'
-                    />
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col className='form__form-group'>
-                  <label className='form__form-group-label'>Experiment rounds:</label>
-                  <div className='form__form-group-field'>
-                    <Field
-                      name='numExpRounds'
-                      component={renderField}
-                      type='number'
-                      disabled={this.props.teamFormat === 'single'}
-                    />
-                  </div>
-                </Col>
-                <Col className='form__form-group'>
-                <label className='form__form-group-label'>HIT Title:</label>
-                <div className='form__form-group-field'>
-                  <Field
-                    name='HITTitle'
-                    component={renderField}
-                    type='text'
-                  />
-                </div>
-              </Col>
               </Row>
               <FieldArray
                   name="cases"
@@ -946,160 +799,7 @@ class TemplateForm extends React.Component {
 const validate = (values, props) => {
   const errors = {};
   if (!values.name) {
-    errors.name = 'required'
-  } else if (values.name.length > 25) {
-    errors.name = 'must be 25 characters or less'
-  }
-  if (!values.numRounds) {
-    errors.numRounds = 'required'
-  } else if (values.numRounds < 4 || values.teamFormat !== 'single' && (parseInt(values.numRounds) < 4 || parseInt(values.teamSize) > 1 &&
-    (parseInt(values.numRounds) > parseInt(values.teamSize) + parseInt(values.numExpRounds)))) {
-    errors.numRounds = 'invalid value'
-  } else if (values.teamFormat === 'single' && values.tasks && !values.tasks.some(x => x.survey &&
-    x.survey.some(x => x.type === 'select'))) {
-    errors.numRounds = 'at least 1 midsurvey with select-options question required';
-  }
-  if (!values.teamSize) {
-    errors.teamSize = 'required'
-  } else if (parseInt(values.teamSize) < 1 || parseInt(values.teamSize) > 10) {
-    errors.teamSize = 'invalid value'
-  }
-  if (!values.numExpRounds) {
-    errors.numExpRounds = 'required'
-  } else if (parseInt(values.numExpRounds) < 2 || parseInt(values.numExpRounds) > 10) {
-    errors.numExpRounds = 'invalid value'
-  }
-
-  if (!values.maskType) {
-    errors.maskType = 'required'
-  }
-  if (!values.roundMinutes) {
-    errors.roundMinutes = 'required'
-  } else if (values.roundMinutes < 1 || values.roundMinutes > 59) {
-    errors.roundMinutes = 'invalid value'
-  }
-  if (!values.surveyMinutes) {
-    errors.surveyMinutes = 'required'
-  } else if (values.surveyMinutes < 1 || values.surveyMinutes > 10) {
-    errors.surveyMinutes = 'invalid value'
-  }
-  errors.tasks = [];
-
-  if (!values.tasks || !values.tasks.length) {
-    errors.name = 'add tasks please'
-  } else if (values.tasks.length !== parseInt(values.numRounds) ) {
-    errors.numRounds = 'number of rounds != number of tasks'
-  }
-
-  values.tasks && values.tasks.forEach((task, i) => {
-    errors.tasks[i] = {steps: [], survey: [], preSurvey: [], polls: []};
-    if (!task.message) {
-      errors.tasks[i].message = 'required';
-    } else  if (!task.steps || !task.steps.length) {
-      errors.tasks[i].message = 'add steps please';
-    } else if (task.hasPreSurvey && (!task.preSurvey || !task.preSurvey.length)) {
-      errors.tasks[i].message = 'add pre survey questions please';
-    } else if (task.hasMidSurvey && (!task.survey || !task.survey.length)) {
-      errors.tasks[i].message = 'add mid survey questions please';
-    }
-
-    if (task.steps) for (let j = 0; j < task.steps.length; j++) {
-      const step = task.steps[j];
-      errors.tasks[i].steps[j] = {};
-      if (!step.message) {
-        errors.tasks[i].steps[j].message = 'required';
-      }
-      if (!step.time) {
-        errors.tasks[i].steps[j].time = 'required';
-      } else {
-        const time = parseFloat(step.time);
-        if (time <= 0 || time >= 1) {
-          errors.tasks[i].steps[j].time = 'invalid';
-        } else {
-          if (j > 0 && parseFloat(task.steps[j - 1].time) > time ) {
-            errors.tasks[i].steps[j].time = 'must be > previous step';
-          }
-        }
-      }
-    }
-    // if (task.polls) for (let j = 0; j < task.polls.length; j++) {
-    //   const poll = task.polls[j];
-    //   errors.tasks[i].polls[j] = {};
-    //   if (!poll.type) {
-    //     errors.tasks[i].polls[j].type = 'required';
-    //   }
-    //   if (poll.type === 'casual' && (!poll.options || (poll.options && !poll.options.length))) {
-    //     errors.tasks[i].message = 'casual polls require options';
-    //   }
-    // }
-    if (task.preSurvey) for (let j = 0; j < task.preSurvey.length; j++){
-      const preSurvey = task.preSurvey[j];
-      errors.tasks[i].preSurvey[j] = {};
-      if (!preSurvey.question) {
-        errors.tasks[i].preSurvey[j].question = 'required';
-      }
-      if (!preSurvey.type) {
-        errors.tasks[i].preSurvey[j].type = 'required';
-      } else if (preSurvey.type === 'select' && (!preSurvey.options || preSurvey.options.length < 2 )) {
-        errors.tasks[i].preSurvey[j].type = 'add options please';
-      }
-    }
-    if (task.survey) for (let j = 0; j < task.survey.length; j++){
-      const survey = task.survey[j];
-      errors.tasks[i].survey[j] = {};
-      if (!survey.question) {
-        errors.tasks[i].survey[j].question = 'required';
-      }
-      if (!survey.type) {
-        errors.tasks[i].survey[j].type = 'required';
-      } else if (survey.type === 'select' && (!survey.options || survey.options.length < 2 )) {
-        errors.tasks[i].survey[j].type = 'add options please';
-      }
-    }
-    if (task.readingPeriods && task.readingPeriods.length) {
-      task.readingPeriods.forEach((x, index) => {
-        if (!x.time) {
-          errors.tasks[i].message = 'add time to reading periods'
-        }
-        if (!x.message) {
-          errors.tasks[i].message = 'add messages to reading periods'
-        }
-      })
-    }
-    if (task.polls) {
-      task.polls.forEach((poll, pollIndex) => {
-        if (poll.questions && poll.questions.length) {
-          poll.questions.forEach((question, questionIndex) => {
-            if (question.type === "primary" || question.type === "single" || question.type === "checkbox"){
-              if (!question.options || question.options.length < 2 ) {
-                errors.tasks[i].polls[pollIndex] = { questions: poll.questions.map(q=> ({type:null}))};
-                errors.tasks[i].polls[pollIndex].questions[questionIndex].type = 'add options please';
-              }
-            }
-          })
-        }
-      })
-    }
-  });
-
-
-  if (values.teamFormat == null) {
-    errors.teamFormat = 'required'
-  }
-  if (values.hasPostSurvey && (!values.postSurvey || !values.postSurvey.length) && values.tasks.length && values.tasks[values.numRounds - 1]) {
-    errors.tasks[values.numRounds - 1].message = 'add questions to post-survey please';
-  }
-  if (values.hasPreSurvey && (!values.preSurvey || !values.preSurvey.length) && values.tasks.length && values.tasks[values.numRounds - 1]) {
-    errors.tasks[values.numRounds - 1].message = 'add questions to pre-survey please';
-  }
-  if (values.cases && values.cases.length) {
-    const caseCount = values.cases.length;
-    if (caseCount * 2 < values.numRounds) {
-      errors.numRounds = 'Add more cases please';
-    }
-    if (values.numRounds % 2 !== 0) {
-      errors.numRounds = 'Number of rounds is not even';
-    }
+    errors.name = 'name is required';
   }
   return errors
 };
@@ -1121,6 +821,7 @@ function mapStateToProps(state) {
     roundGen: selector(state, 'roundGen'),
     tasks: selector(state, 'tasks'),
     surveyList: state.survey.surveyList,
+    // state.users.userList,
     surveyTemplatesOptions: state.survey.surveyList.map((x, index) => {return {value: index, label: x.name}}),
     teamFormat: selector(state, 'teamFormat'),
     hasPostSurvey: selector(state, 'hasPostSurvey'),

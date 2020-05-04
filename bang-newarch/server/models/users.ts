@@ -9,14 +9,17 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 let UserSchema = new Schema({
+  name: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: false},
   socketId:  { type: String},
-  token:  { type: String, required: true, unique: true },
-  systemStatus: { type: String, required: true, enum: ['willbang', 'hasbanged'], default: 'willbang'},
-  mturkId:  { type: String, required: true, unique: true },
-  testAssignmentId:  { type: String, required: true },
+  token:  { type: String, required: false },
+  systemStatus: { type: String, required: false, enum: ['willbang', 'hasbanged'], default: 'willbang'},
+  mturkId:  { type: String, required: false },
+  testAssignmentId:  { type: String, required: false },
   mainAssignmentId:  { type: String },
   turkSubmitTo:  { type: String, },
-  connected:  { type: Boolean, required: true, default: false },
+  connected:  { type: Boolean, required: false, default: false },
   realNick: String,
   fakeNick: String,
   currentChat: {type: mongoose.Schema.Types.ObjectId, ref: 'Chat'},
@@ -25,7 +28,7 @@ let UserSchema = new Schema({
   lastDisconnect: Date,
   isTest: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
-  //status: { type: String, enum: ['waiting', 'active'], default: 'waiting',required: true },
+  //status: { type: String, enum: ['waiting', 'active'], default: 'waiting',required: false },
   batch: {type: mongoose.Schema.Types.ObjectId, ref: 'Batch'},
   // Fields for questions from issue https://github.com/StanfordHCI/bang/issues/457
   degree: {type: String, required: false, $enum: ['Less than High School', 'High school or equivalent', 'Some college',

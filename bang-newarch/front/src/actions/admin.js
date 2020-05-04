@@ -1,6 +1,6 @@
 import { errorCatcher, setLoading, setSnackbar } from "./app";
 import { history } from "../app/history";
-import { axios } from "./axiosConfig";
+import {axios, axiosP} from "./axiosConfig";
 export const BATCH_INFO_FETCHED = "BATCH_INFO_FETCHED";
 export const BATCH_ADDED = "BATCH_ADDED";
 export const BATCH_UPDATED = "BATCH_UPDATED";
@@ -15,6 +15,8 @@ export const SWITCH_EMPTY_BATCHES_VISIBILITY =
   "SWITCH_EMPTY_BATCHES_VISIBILITY";
 export const BONUS_PAID = "BONUS_PAID";
 export const LOGS_FETCHED = "LOGS_FETCHED";
+export const ZOOM_LINK_FETCHED = "ZOOM_LINK_FETCHED";
+export const CAPTCHA_FETCHED = "CAPTCHA_FETCHED";
 
 export function updateBatch(batch) {
   return (dispatch) => {
@@ -327,4 +329,100 @@ export function loadLogs(params) {
         errorCatcher(err, dispatch);
       });
   };
+}
+
+export function generateZoomLink(currentZoomLink) {
+  return (dispatch) => {
+    if (!currentZoomLink || currentZoomLink === "") {
+        dispatch(setLoading(true));
+        return axios({
+            method: "get",
+            url: "admin/zoomLink/",
+        })
+            .then((response) => {
+                console.log(
+                    "response, data",
+                    response,
+                    response.data.logs,
+                    response.data.errorLogs
+                );
+                dispatch(setLoading(false));
+                dispatch({
+                    type: ZOOM_LINK_FETCHED,
+                    data: response.data,
+                });
+            })
+            .catch((err) => {
+                errorCatcher(err, dispatch);
+            });
+    } else {
+        dispatch(setSnackbar("Zoom Link already generated!"))
+    }
+
+  };
+}
+
+export function snackbar(message) {
+    console.log()
+    return (dispatch) => {
+        console.log('dispatching snack')
+        dispatch(setSnackbar(message));
+    }
+}
+
+export function getCaptcha() {
+    console.log(213321)
+    return (dispatch) => {
+        console.log("getting captcha");
+        dispatch(setLoading(true));
+        return axiosP({
+            method: "get",
+            url: "api/captcha",
+        })
+            .then((response) => {
+                console.log(
+                    "response, data",
+                    response,
+                    response.data.logs,
+                    response.data.errorLogs
+                );
+                dispatch(setLoading(false));
+                dispatch({
+                    type: CAPTCHA_FETCHED,
+                    data: response.data,
+                });
+            })
+            .catch((err) => {
+                errorCatcher(err, dispatch);
+            });
+    };
+}
+
+export function sendDecodedCaptcha(captcha) {
+    return (dispatch) => {
+        console.log("sending captcha", captcha);
+        // dispatch(setLoading(true));
+        return axiosP({
+            method: "post",
+            url: "api/captcha",
+            data: {captcha},
+            params: {captcha}
+        })
+            // .then((response) => {
+            //     console.log(
+            //         "response, data",
+            //         response,
+            //         response.data.logs,
+            //         response.data.errorLogs
+            //     );
+            //     dispatch(setLoading(false));
+            //     dispatch({
+            //         type: CAPTCHA_FETCHED,
+            //         data: response.data,
+            //     });
+            // })
+            .catch((err) => {
+                errorCatcher(err, dispatch);
+            });
+    };
 }

@@ -1,4 +1,4 @@
-/** AddTemplate.js
+/** AddClass.js
  *  front-end
  * 
  *  admin only layout for adding a template
@@ -16,7 +16,7 @@ import {bindActionCreators} from "redux";
 import TemplateForm from './TemplateForm'
 import moment from 'moment'
 
-class AddTemplate extends PureComponent {
+class AddClass extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +39,7 @@ class AddTemplate extends PureComponent {
             <Card>
               {this.state.isReady && <CardBody>
                 <div className='card__title'>
-                  <h5 className='bold-text'>Add template</h5>
+                  <h5 className='bold-text'>Add Class</h5>
                 </div>
                 <TemplateForm
                   isAdd
@@ -66,4 +66,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(AddClass);

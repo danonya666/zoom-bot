@@ -4,7 +4,7 @@
  *  admin only layout for adding / editing (validating) a survey
  *
  *  called by:
- *    1. AddTemplate.js
+ *    1. AddClass.js
  *    2. EditTemplate.js (empty, code scrap)
  *    3. TemplateInfo.js
  */

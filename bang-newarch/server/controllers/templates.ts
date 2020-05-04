@@ -8,7 +8,7 @@ export const loadTemplateList = async function(req, res) {
     if (req.query.full) {
       select = "";
     } else {
-      select = "name teamSize teamFormat";
+      select = "name teamSize teamFormat cases";
     }
     let predicate = {};
     if (req.query.teamFormat) {
@@ -39,7 +39,7 @@ export const loadTemplate = async function(req, res) {
 
 export const addTemplate = async function(req, res) {
   try {
-    const newTemplate = processPostSurvey(req.body);
+    const newTemplate = req.body;
     const template = await Template.create(newTemplate);
     res.json({ template: template });
   } catch (e) {
@@ -85,7 +85,7 @@ export const cloneTemplate = async function(req, res) {
 
 export const updateTemplate = async function(req, res) {
   try {
-    const updatedTemplate = processPostSurvey(req.body);
+    const updatedTemplate = req.body;
     const template = await Template.findByIdAndUpdate(
       updatedTemplate._id,
       { $set: updatedTemplate },

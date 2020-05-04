@@ -37,6 +37,8 @@ import { io } from "../index";
 import { Bonus } from "../models/bonuses";
 import { activeCheck } from "./users";
 import { calculateMoneyForBatch } from "./utils";
+import {loadTemplateList} from "./templates";
+import {Template} from "../models/templates";
 
 export const addBatch = async function(req, res) {
   try {
@@ -381,7 +383,7 @@ export const loadBatchList = async function(req, res) {
 
 const usersWithBonuses = async function() {
   const users = await User.find({})
-    .select("mturkId systemStatus connected testAssignmentId isTest _id")
+    .select("mturkId systemStatus connected testAssignmentId isTest _id name lastName")
     .lean()
     .exec();
   const allBonuses = await Bonus.find({}).select("user amount");
@@ -402,14 +404,18 @@ const usersWithBonuses = async function() {
 
 export const loadUserList = async function(req, res) {
   try {
-    let users = await usersWithBonuses();
+    let templates = await Template.find({});
+    let users = [];
+    templates.forEach(t => {
+      t.cases.forEach(u => {
+        console.log('user', u);
+        users.push({className: t.name, name: u.name, lastName: u.lastName});
+      })
+    })
+    console.log('users', users);
     users.forEach((user) => {
       user.loginLink =
-        process.env.HIT_URL +
-        "?workerId=" +
-        user.mturkId +
-        "&assignmentId=" +
-        user.testAssignmentId;
+        user.name + " " + user.lastName;
       return user;
     });
 
@@ -807,3 +813,7 @@ export const migrateUsers = async (req, res) => {
     errorHandler(e, "migrate users error");
   }
 };
+
+export const zoomLink = async (req, res) => {
+  res.json({zoomLink: "generatedLink.zoom.us"})
+}

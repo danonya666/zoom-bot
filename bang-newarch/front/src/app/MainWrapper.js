@@ -55,30 +55,33 @@ class MainWrapper extends PureComponent {
                 className="topbar-main fixed-top"
               >
                 <Container fluid className="justify-content-md-start">
-                  <Link className="topbar__collapse-link" to="/users">
-                    users
+                  <Link className="topbar__collapse-link" to="/home">
+                    home
                   </Link>
+                  {/*<Link className="topbar__collapse-link" to="/users">*/}
+                  {/*  users*/}
+                  {/*</Link>*/}
                   <Link className="topbar__collapse-link" to="/batches">
-                    batches
+                    lessons
                   </Link>
                   <Link className="topbar__collapse-link" to="/templates">
-                    templates
+                    classes
                   </Link>
-                  <Link className="topbar__collapse-link" to="/surveys">
-                    surveys
-                  </Link>
+                  {/*<Link className="topbar__collapse-link" to="/surveys">*/}
+                  {/*  surveys*/}
+                  {/*</Link>*/}
                   {/*<Link to={'/cases'} className='topbar__collapse-link'>*/}
                   {/*  cases*/}
                   {/*</Link>*/}
-                  <Link className="topbar__collapse-link" to="/waiting">
-                    waitroom
-                  </Link>
-                  <Link className="topbar__collapse-link" to="/notify">
-                    notify
-                  </Link>
-                  <Link className="topbar__collapse-link" to="/logs">
-                    logs
-                  </Link>
+                  {/*<Link className="topbar__collapse-link" to="/waiting">*/}
+                  {/*  waitroom*/}
+                  {/*</Link>*/}
+                  {/*<Link className="topbar__collapse-link" to="/notify">*/}
+                  {/*  notify*/}
+                  {/*</Link>*/}
+                  {/*<Link className="topbar__collapse-link" to="/logs">*/}
+                  {/*  logs*/}
+                  {/*</Link>*/}
                 </Container>
               </Navbar>
             )}
