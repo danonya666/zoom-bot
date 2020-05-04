@@ -21,7 +21,7 @@ import {
   UncontrolledCollapse,
   Button,
   ButtonGroup,
-  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner
+  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner,Alert
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -236,7 +236,7 @@ class LessonList extends React.Component {
                   <Row>
                     <Col md={12} lg={3}>
                       <div className='card__title' style={{height: '50px'}}>
-                        <h5 className='bold-text'>My lessons</h5>
+                        <h5 className='bold-text'>Мои уроки</h5>
                       </div>
                       <ButtonGroup vertical style={{width: '100%'}}>
                         {
@@ -277,7 +277,8 @@ class LessonList extends React.Component {
 
                         </div>
                       </div>
-                      <Table borderless hover>
+                      {this.state.activeNodeId && this.state.cool_students.length > 0 ?
+                        <Table borderless hover>
                         <thead>
                         <tr>
                           <th colSpan={3}>
@@ -354,7 +355,15 @@ class LessonList extends React.Component {
                           ):<p className="text-center my-4">Нет студентов</p>
                         }
                         </tbody>
-                      </Table>
+                      </Table>:
+                        <Alert color="primary" className='text-center'>
+                          {
+                            !this.state.activeNodeId
+                              ?'Необходимо выбрать урок в меню слева'
+                              :'Нет студентов в данном уроке'
+                          }
+                        </Alert>
+                      }
                     </Col>
                   </Row>
 
