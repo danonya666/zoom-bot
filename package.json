@@ -1,3 +1,5 @@
 {
-  "dependencies": {}
+  "dependencies": {
+    "treeview-react-bootstrap": "^0.4.6"
+  }
 }

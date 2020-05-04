@@ -29,7 +29,7 @@ import AddTemplate from '../containers/admin/AddClass'
 import SurveyList from '../containers/admin/SurveyList'
 import SurveyInfo from '../containers/admin/SurveyInfo'
 import AddSurvey from '../containers/admin/AddSurvey'
-import BatchResult from '../containers/admin/BatchResult'
+import LessonSingle from '../containers/admin/LessonSingle'
 import UserList from '../containers/admin/UserList'
 import HasBanged from '../containers/HasBanged'
 import Notify from '../containers/admin/Notify'
@@ -56,7 +56,7 @@ const MainRouter = (props) => {
           <Route exact path='/batch-end' component={BatchEnd}/>
           <Route exact path='/batches-add' component={AddBatch}/>
           <Route exact path='/lessons' component={LessonList}/>
-          <Route path='/batches/:id' component={BatchResult}/>
+          <Route path='/lessons/:id' component={LessonSingle}/>
           <Route exact path='/classes' component={ClassList}/>
           <Route exact path='/templates-add' component={AddTemplate}/>
           <Route path='/templates/:id' component={TemplateInfo}/>

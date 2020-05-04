@@ -14,7 +14,7 @@
     margin-right: 0;
   }
 
-  &:before {
+  &:not(.btn-noanim):before {
     position: absolute;
     height: 0;
     width: 0;
@@ -387,14 +387,14 @@
   }
 }
 
-.btn-group {
+.btn-group, .btn-group-vertical {
   border-radius: 5px;
   margin-bottom: -10px;
 
   .btn {
-    margin-right: 0;
     padding: 10px 15px;
     font-weight: 500;
+    margin:0 !important;
   }
 
   &.btn-group--justified {
