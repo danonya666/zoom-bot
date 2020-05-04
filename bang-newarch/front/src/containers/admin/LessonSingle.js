@@ -102,8 +102,26 @@ class LessonSingle extends React.Component {
           {type:'surprised',value:25},
           {type:'sad',value:40},
         ],
-        time: '15m'
-      }
+        time: '15m',
+        id: 1,
+      },
+      {
+        photo: 'http://via.placeholder.com/64/',
+        fullName: 'Фамилия Имя Отчество2',
+        emotions: [
+          {type:'angry',value:2},
+          {type:'sad',value:6},
+          {type:'scared',value:2},
+          {type:'neutral',value:10},
+          {type:'surprised',value:15},
+          {type:'angry',value:3},
+          {type:'scared',value:7},
+          {type:'surprised',value:25},
+          {type:'sad',value:40},
+        ],
+        time: '15m',
+        id: 2,
+      },
     ]
   }
 
@@ -136,12 +154,27 @@ class LessonSingle extends React.Component {
     }
   }
 
+  async getRandomUserImage() {
+    const result = await fetch('https://randomuser.me/api/');
+    const json = await result.json();
+    return json.results[0].picture.thumbnail;
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({
         isReady: true,
       })
     }, Math.random() * 2500)
+    this.state.students.forEach(async student => {
+      const img = await this.getRandomUserImage();
+      this.setState({
+        students: [
+          ...this.state.students.filter(_=>_.id!==student.id),
+          {...student, photo: img},
+        ]
+      })
+    })
   }
 
   onSetActiveNode(id) {
@@ -163,7 +196,7 @@ class LessonSingle extends React.Component {
               {this.state.isReady ?
                 <CardBody>
                   <Row>
-                    <Col md={12} lg={4}>
+                    <Col md={12} lg={3}>
                       <div className='card__title'>
                         <h5 className='bold-text'>My lessons</h5>
                       </div>
@@ -197,7 +230,7 @@ class LessonSingle extends React.Component {
 
                       </ButtonGroup>
                     </Col>
-                    <Col md={12} lg={8}>
+                    <Col md={12} lg={9}>
                       <div className='card__title'>
                         <h5 className='bold-text'>My lessons</h5>
                       </div>
