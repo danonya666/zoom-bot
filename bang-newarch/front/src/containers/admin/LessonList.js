@@ -36,6 +36,7 @@ import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
 import {loadTemplateList} from "../../actions/templates";
 import { format, formatDistance, formatRelative, subDays, subSeconds, subMinutes } from 'date-fns'
+import { history } from "../../app/history";
 
 class LessonList extends React.Component {
   state = {
@@ -206,7 +207,7 @@ class LessonList extends React.Component {
 
 
   render() {
-    console.log('usreList', this.state.cool_students);
+    console.log('usreList', this.state.cool_students, 'active nide', this.activeNode);
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>

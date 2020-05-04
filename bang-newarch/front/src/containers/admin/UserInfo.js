@@ -82,15 +82,15 @@ class TemplateInfo extends PureComponent {
 
                                 <Col>
                                     <label>Name: </label>
-                                    <label style={{marginLeft: '5px', marginTop: '5px'}}>{user.name}</label>
+                                    <label style={{marginLeft: '5px', marginTop: '5px'}}>{user.first_name}</label>
                                 </Col>
                                 <Col>
                                     <label>Last Name: </label>
-                                    <label style={{marginLeft: '5px'}}>{user.lastName}</label>
+                                    <label style={{marginLeft: '5px'}}>{user.last_name}</label>
                                 </Col>
                                 <Col>
                                     <label>Class Name: </label>
-                                    <label style={{marginLeft: '5px'}}>{user.className}</label>
+                                    <label style={{marginLeft: '5px'}}>{user.klass.name}</label>
                                 </Col>
 
                                 <Col>
