@@ -32,6 +32,7 @@ import {
 } from "Actions/admin";
 import Pagination from "Components/Pagination";
 import {loadTemplateList} from "../../actions/templates";
+import { history } from "../../app/history";
 
 const pageSize = 10;
 
@@ -145,18 +146,18 @@ class UserList extends React.Component {
                     </thead>
                     <tbody>
                       {this.state.pageOfItems.map((user, index) => {
+                        console.log('user', user);
+                        user.id = 123; // mock
                         return (
                           <tr key={user._id}>
                             <td>
                               {(this.state.page - 1) * pageSize + index + 1}
                             </td>
                             {/*<td>{user.mturkId}</td>*/}
-                            <td>{user.lastName + " " + user.name}</td>
-                            <td>{user.className}</td>
-                            <td>{user.connected ? "yes" : "no"}</td>
-                            <td>${user.totalBonuses}</td>
-                            <td>
-                            </td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.lastName + " " + user.name}</td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.className}</td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>{user.connected ? "yes" : "no"}</td>
+                            <td onClick={() => {history.push('/users/' + user.id)}}>${user.totalBonuses}</td>
                           </tr>
                         );
                       })}
