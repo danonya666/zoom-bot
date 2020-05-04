@@ -6,9 +6,10 @@
 }
 
 .wrapper {
-  @include themify($themes) {
-    background: themed('colorBackgroundBody');
-  }
+  //@include themify($themes) {
+  //  background: themed('colorBackgroundBody');
+  //}
+  background: linear-gradient(-30deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
 }
 
 .container__wrap {
@@ -19,5 +20,6 @@
 
   @media screen and (min-width: 576px) {
     padding-left: 30px;
+    padding-right: 30px;
   }
 }

@@ -1,10 +1,10 @@
 /** ClassList.js
  *  front-end
- * 
+ *
  *  admin only layout for viewing all templates
- * 
+ *
  *  called by:
- *    1. Router.js    
+ *    1. Router.js
  */
 
 import React from 'react';
@@ -34,8 +34,10 @@ class ClassList extends React.Component {
             <Card>
               <CardBody>
                 <div className='card__title'>
-                  <h5 className='bold-text'>Class list</h5>
-                  <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>Add Class</Button>
+                  <Container fluid className="justify-content-md-between flex ai-center">
+                    <h5 className='bold-text'>Class list</h5>
+                    <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>Add Class</Button>
+                  </Container>
                 </div>
                 <Table className='table table--bordered table--head-accent table-hover'>
                   <thead>
