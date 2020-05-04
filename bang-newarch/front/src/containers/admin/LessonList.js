@@ -209,6 +209,19 @@ class LessonList extends React.Component {
     this.setState({ cool_students: updatedCoolStudents });
   }
 
+  getEmotionByColor(color) {
+    switch(color) {
+      case 'danger':
+        return 'Злость';
+      case 'warning':
+        return 'Испуг';
+      case 'success':
+        return 'Радость';
+      case 'info':
+        return 'Спокойствие';
+    }
+  }
+
 
   render() {
     console.log('usreList', this.state.cool_students, 'active nide', this.activeNode);
@@ -262,9 +275,27 @@ class LessonList extends React.Component {
                         <thead>
                         <tr>
                           <th colSpan={3}>
-                            <a href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
-                            {(this.activeNode && this.activeNode.title) ||'Не выбран урок'}
-                            </a>
+                            {this.activeNode?
+                              <div className='color-definitions'>
+                                <a style={{marginRight: '2rem'}} href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
+                                  {this.activeNode.title}
+                                </a>
+                                <div className='color-definitions'>
+                                {
+                                  ['danger','warning','success','info'].map(color =>
+                                    <div className="color-definition">
+                                      <div className={color}></div>
+                                      <span>- {this.getEmotionByColor(color)}</span>
+                                    </div>
+                                  )
+                                }
+                                </div>
+                              </div>:
+                              <p>
+                                Выберите урок
+                              </p>
+                            }
+
                           </th>
                           <th>
                             <ClockIcon color="#DC3545" id="clock-tooltip" />

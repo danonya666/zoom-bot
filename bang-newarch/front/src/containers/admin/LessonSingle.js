@@ -190,6 +190,19 @@ class LessonSingle extends React.Component {
     };
   }
 
+  getEmotionByColor(color) {
+    switch(color) {
+      case 'danger':
+        return 'Злость';
+      case 'warning':
+        return 'Испуг';
+      case 'success':
+        return 'Радость';
+      case 'info':
+        return 'Спокойствие';
+    }
+  }
+
 
 
 
@@ -216,7 +229,7 @@ class LessonSingle extends React.Component {
                           <Doughnut data={{
                             datasets: [{
                               data: [10, 20, 30],
-                              backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"]
+                              backgroundColor: ["#DC3545", "#3BA745", "#F7C10A", "#3FA2B8"]
                             }],
 
                             // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -283,7 +296,18 @@ class LessonSingle extends React.Component {
                       <Table borderless hover>
                         <thead>
                         <tr>
-                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) || 'Не выбрана'}</th>
+                          <th colSpan={3}>
+                            <div className='color-definitions'>
+                              {
+                                ['danger','warning','success','info'].map(color =>
+                                  <div className="color-definition">
+                                    <div className={color}></div>
+                                    <span>- {this.getEmotionByColor(color)}</span>
+                                  </div>
+                                )
+                              }
+                            </div>
+                          </th>
                           <th>
                             <ClockIcon color="#DC3545" id="clock-tooltip" />
                             <UncontrolledTooltip placement="top" target="clock-tooltip">
