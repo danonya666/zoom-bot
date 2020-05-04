@@ -34,6 +34,7 @@ import RoundSurveyForm from "../RoundSurveyForm";
 import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
+import {history} from "../../app/history";
 
 class LessonList extends React.Component {
   state = {
@@ -244,7 +245,11 @@ class LessonList extends React.Component {
                       <Table borderless hover>
                         <thead>
                         <tr>
-                          <th colSpan={3}>{(this.activeNode && this.activeNode.title) ||'Не выбран урок'}</th>
+                          <th colSpan={3}>
+                            <a href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
+                            {(this.activeNode && this.activeNode.title) ||'Не выбран урок'}
+                            </a>
+                          </th>
                           <th>
                             <ClockIcon/>
                           </th>
