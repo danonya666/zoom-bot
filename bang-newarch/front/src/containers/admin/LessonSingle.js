@@ -35,6 +35,7 @@ import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
 import {Bar, Doughnut, Line} from "react-chartjs-2";
+import {loadUserList} from "../../actions/admin";
 
 const EMOTIONS = {
   '-3': 'Злость',
@@ -92,56 +93,24 @@ class LessonSingle extends React.Component {
       title: '4:20 LESSON',
     },
     activeNodeId: null,
-    students: [
-      {
-        photo: 'http://via.placeholder.com/64/',
-        fullName: 'Фамилия Имя Отчество',
-        emotions: [
-          {type: 'angry', value: 2},
-          {type: 'sad', value: 6},
-          {type: 'scared', value: 2},
-          {type: 'neutral', value: 10},
-          {type: 'surprised', value: 15},
-          {type: 'angry', value: 3},
-          {type: 'scared', value: 7},
-          {type: 'surprised', value: 25},
-          {type: 'sad', value: 40},
-        ],
-        time: '15m',
-        id: 1,
-      },
-      {
-        photo: 'http://via.placeholder.com/64/',
-        fullName: 'Фамилия Имя Отчество2',
-        emotions: [
-          {type: 'angry', value: 2},
-          {type: 'sad', value: 6},
-          {type: 'scared', value: 2},
-          {type: 'neutral', value: 10},
-          {type: 'surprised', value: 15},
-          {type: 'angry', value: 3},
-          {type: 'scared', value: 7},
-          {type: 'surprised', value: 25},
-          {type: 'sad', value: 40},
-        ],
-        time: '15m',
-        id: 2,
-      },
-    ]
+    userList: [
+
+    ],
+    cool_students: [],
   }
 
   colorByEmotion(emotion) {
-    switch (emotion) {
-      case 'angry':
-      case 'sad':
+    switch(emotion) {
+      case 'AY':
+      case 'SD':
         return 'danger';
-      case 'happy':
-      case 'surprised':
+      case 'HP':
+      case 'SP':
         return 'success';
-      case 'disgust':
-      case 'scared':
+      case 'DG':
+      case 'SC':
         return 'warning';
-      case 'neutral':
+      case 'NT':
         return 'info';
       default:
         return 'info';
@@ -153,8 +122,37 @@ class LessonSingle extends React.Component {
       this.setState({
         isReady: true,
       })
+      this.props.loadUserList().then(t => this.setStudentsRandomPhotos().then(t => {}));
     }, Math.random() * 2500)
+  }
 
+  async setStudentsRandomPhotos() {
+    console.log('aaa')
+    let newStudents = [];
+    for(const student of this.props.userList) {
+      const img = await this.getRandomUserImage();
+      Math.random() > 0.5 ?
+          newStudents.push({
+            ...student,
+            photo: img,
+          }) : 1;
+    }
+    this.setState({
+      cool_students: newStudents,
+    })
+    return newStudents
+  }
+
+  async getRandomUserImage() {
+    const result = await fetch('https://randomuser.me/api/');
+    const json = await result.json();
+    return json.results[0].picture.thumbnail;
+  }
+
+  dif(emotion) {
+    const t1 = new Date(emotion.end_time)
+    const t2 = new Date(emotion.start_time)
+    return Math.abs((t1.getTime() - t2.getTime()) / 1000)
   }
 
   getChartDataset(data, color = 'rgba(75,192,192,{})') {
@@ -318,20 +316,26 @@ class LessonSingle extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          this.state.students.map(student =>
-                            <tr key={student.id}>
+                          this.state.cool_students.map(student =>
+                          {
+                            const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
+                            return <tr key={student.id}>
                               <td style={{width: '84px'}}>
                                 <Media src={student.photo} width={64} height={64}/>
                               </td>
                               <td style={{width: '250px'}}>
-                                <b>{student.fullName}</b>
+                                <b>{student.first_name + " " + student.last_name}</b>
                               </td>
                               <td>
                                 <Progress multi>
                                   {
-                                    student.emotions.map(emotion =>
-                                      <Progress key={`${emotion.type}#${emotion.value}#${Math.random() * 1000}`} bar
-                                                color={this.colorByEmotion(emotion.type)} value={emotion.value}/>
+                                    student.lessons[0].emotions.map(emotion =>
+                                    <Progress
+                                            key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
+                                            bar
+                                            color={this.colorByEmotion(emotion.emotion_type)}
+                                            value={this.dif(emotion) / fullLength * 100}
+                                        />
                                     )
                                   }
                                 </Progress>
@@ -341,6 +345,7 @@ class LessonSingle extends React.Component {
                                 {student.time}
                               </td>
                             </tr>
+                          }
                           )
                         }
                         </tbody>
@@ -364,11 +369,17 @@ class LessonSingle extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    userList: state.admin.userList,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return bindActionCreators(
+      {
+        loadUserList,
+      },
+      dispatch
+  );
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(LessonSingle);
