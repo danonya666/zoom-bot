@@ -35,7 +35,6 @@ import TreeView from "treeview-react-bootstrap";
 import ClockOutlineIcon from "mdi-react/ClockOutlineIcon";
 import ClockIcon from "mdi-react/ClockIcon";
 import {loadTemplateList} from "../../actions/templates";
-import { format, formatDistance, formatRelative, subDays, subSeconds, subMinutes } from 'date-fns'
 import { history } from "../../app/history";
 
 class LessonList extends React.Component {
@@ -263,7 +262,10 @@ class LessonList extends React.Component {
                             </a>
                           </th>
                           <th>
-                            <ClockIcon/>
+                            <ClockIcon color="#DC3545" id="clock-tooltip" />
+                            <UncontrolledTooltip placement="top" target="clock-tooltip">
+                              Время отсутствия в кадре
+                            </UncontrolledTooltip>
                           </th>
                         </tr>
                         </thead>
