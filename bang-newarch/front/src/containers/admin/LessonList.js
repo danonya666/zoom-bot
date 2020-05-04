@@ -123,7 +123,8 @@ class LessonList extends React.Component {
         time: '15m',
         id: 2,
       },
-    ]
+    ],
+    cool_students: [],
   }
 
   get activeNode() {
@@ -167,15 +168,15 @@ class LessonList extends React.Component {
         isReady: true,
       })
     }, Math.random() * 2500)
-
-    this.setStudentsRandomPhotos();
-    this.props.loadUserList();
-
+    this.props.loadUserList().then(() => {
+      this.setStudentsRandomPhotos().then(r => {});
+    });
   }
 
   async setStudentsRandomPhotos() {
+    console.log('aaa')
     let newStudents = [];
-    for(const student of this.state.students) {
+    for(const student of this.props.userList) {
       const img = await this.getRandomUserImage();
       newStudents.push({
         ...student,
@@ -183,7 +184,7 @@ class LessonList extends React.Component {
       });
     }
     this.setState({
-      students: newStudents,
+      cool_students: newStudents,
     })
   }
 
@@ -198,7 +199,7 @@ class LessonList extends React.Component {
 
 
   render() {
-    console.log('usreList', this.props.userList);
+    console.log('usreList', this.state.cool_students);
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>
@@ -256,13 +257,13 @@ class LessonList extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          (this.props.userList && this.props.userList.length > 0
+                          (this.state.cool_students && this.state.cool_students.length > 0
                               // && this.state.activeNodeId
                           )
-                            ?this.props.userList.map(student =>
+                            ?this.state.cool_students.map(student =>
                             <tr key={student.id}>
                               <td style={{width: '84px'}}>
-                                {/*<Media src={student.photo} width={64} height={64}/>*/}
+                                <Media src={student.photo} width={64} height={64}/>
                               </td>
                               <td style={{width: '250px'}}>
                                 <b>{student.first_name + " " + student.last_name}</b>
