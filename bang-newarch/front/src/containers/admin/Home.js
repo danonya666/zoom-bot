@@ -77,8 +77,8 @@ class Home extends React.Component {
                 </Card>
                 <Card>
                     <CardBody>
-                                <Button onClick={() => {history.push('/batches/')}} > Lessons </Button>
-                                <Button onClick={() => {history.push('/templates/')}} > Classes </Button>
+                                <Button onClick={() => {history.push('/lessons/')}} > Lessons </Button>
+                                <Button onClick={() => {history.push('/classes/')}} > Classes </Button>
 
 
                     </CardBody>

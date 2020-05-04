@@ -38,6 +38,7 @@ import Unsubscribe from '../containers/Unsubscribe'
 import Kicked from "../containers/Kicked";
 import Logs from "../containers/admin/Logs";
 import Home from "../containers/admin/Home";
+import UserInfo from "../containers/admin/UserInfo";
 
 const MainRouter = (props) => {
   const {user, appReady} = props;
@@ -59,6 +60,7 @@ const MainRouter = (props) => {
           <Route exact path='/classes' component={ClassList}/>
           <Route exact path='/templates-add' component={AddTemplate}/>
           <Route path='/templates/:id' component={TemplateInfo}/>
+          <Route path='/users/:id' component={UserInfo}/>
           <Route exact path='/surveys' component={SurveyList}/>
           <Route exact path='/surveys-add' component={AddSurvey}/>
           <Route path='/surveys/:id' component={SurveyInfo}/>
