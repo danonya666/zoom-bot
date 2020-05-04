@@ -199,10 +199,11 @@ class LessonList extends React.Component {
   onSetActiveNode(id) {
     if(id === this.state.activeNode)
       return;
+    console.log('new active node', id)
     this.setState({
       activeNodeId: id,
     })
-    // Здесь фетчить юзеров группы по activeNodeId и в students класть
+    console.log(this.state.cool_students);
   }
 
 
@@ -289,7 +290,6 @@ class LessonList extends React.Component {
                                         student.lessons[0].emotions.map(emotion =>
                                         {
                                           const value = this.dif(emotion) / fullLength * 100
-                                          console.log('value', emotion);
                                           return <Progress
                                               key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
                                               bar
