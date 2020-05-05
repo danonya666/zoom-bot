@@ -41,7 +41,7 @@ class ClassList extends React.Component {
                 <div className='card__title'>
                   <Container fluid className="justify-content-md-between flex ai-top no-padding">
                     <h5 className='bold-text'>Список классов</h5>
-                    <Button className="btn btn-primary" onClick={() => history.push('/templates-add')}>
+                    <Button className="btn btn-primary" onClick={() => history.push('/class-add')}>
                       <PlusIcon size={24} />
                     </Button>
                   </Container>

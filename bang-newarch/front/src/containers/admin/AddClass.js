@@ -1,14 +1,14 @@
 /** AddClass.js
  *  front-end
- * 
+ *
  *  admin only layout for adding a template
- * 
+ *
  *  called by:
- *    1. Router.js    
+ *    1. Router.js
  */
 
  import React, {PureComponent} from 'react';
-import {Card, CardBody, Col, Badge, Row, Container, Button, Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap';
+import {Card, CardBody, Form, FormGroup, Input, Label, Col, Badge, Row, Container, Button, Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap';
 import {connect} from "react-redux";
 import {addTemplate} from "Actions/templates";
 import {loadSurveyList} from "Actions/surveys";
@@ -20,33 +20,30 @@ class AddClass extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isReady: false
     };
   }
 
-  componentWillMount(){
-    Promise.all([
-      this.props.loadSurveyList({full: true})
-    ])
-      .then(()=>{
-        this.setState({isReady: true})
-      })
-  };
+  async sendForm() {
+    console.error('not implemented yet :(');
+  }
 
   render() {
     return (
       <Container style={{maxWidth: '100%'}}>
             <Card>
-              {this.state.isReady && <CardBody>
+              <CardBody>
                 <div className='card__title'>
-                  <h5 className='bold-text'>Add Class</h5>
+                  <h5 className='bold-text'>Добавить класс</h5>
                 </div>
-                <TemplateForm
-                  isAdd
-                  initialValues={{numExpRounds: 2, tasks: []}}
-                  onSubmit={this.props.addTemplate}
-                />
-              </CardBody>}
+                <Form>
+                  <FormGroup>
+                    <Label for="name">Название</Label>
+                    <Input type="text" name="name" id='name' placeholder="Введите название" />
+                  </FormGroup>
+                  <Button onClick={this.sendForm}>Сохранить</Button>
+
+                </Form>
+              </CardBody>
             </Card>
       </Container>
     )
@@ -61,8 +58,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addTemplate,
-    loadSurveyList
   }, dispatch);
 }
 
