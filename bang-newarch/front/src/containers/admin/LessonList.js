@@ -89,7 +89,7 @@ class LessonList extends React.Component {
         ]
       },
     ],
-    activeNodeId: 1,
+    activeNodeId: null,
     students: [
       {
         photo: 'http://via.placeholder.com/64/',
