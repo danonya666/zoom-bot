@@ -85,48 +85,6 @@ class AddLesson extends React.Component {
             <div className='card__title'>
               <h5 className='bold-text'>Добавить урок</h5>
             </div>
-            <form className='form form--horizontal' style={{paddingBottom: '5vh'}} onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
-              <h5>Filter users by:</h5>
-              <div className='form__form-group'>
-                <label className='form__form-group-label'>Class</label>
-                <div className='form__form-group-field'>
-                  <Field
-                      name='className'
-                      component={renderSelectField}
-                      options={this.props.templateList.map(t => {return {value: t.name, label: t.name}})}
-                  />
-                </div>
-              </div>
-              <div className='form__form-group'>
-                <label className='form__form-group-label'>Note</label>
-                <div className='form__form-group-field'>
-                  <Field
-                    name='note'
-                    component={renderTextArea}
-                    type='text'
-                  />
-                </div>
-              </div>
-              <div className='form__form-group'>
-                <label className='form__form-group-label'>Zoom Link</label>
-              </div>
-              <div className='form__form-group'>
-                {<label>{this.props.zoomLink}</label>}
-
-                <Button style={{marginLeft: "10px"}} onClick={() => {navigator.clipboard.writeText(this.props.zoomLink);}}>
-                  Copy to clipboard
-                </Button>
-
-              </div>
-              <div className='form__form-group'>
-
-              </div>
-
-            <ButtonToolbar className='mx-auto form__button-toolbar'>
-                <Button type="submit" disabled={invalid} color='primary' size='sm'
-                >Add lesson</Button>
-              </ButtonToolbar>
-            </form>
             <Form onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
               <FormGroup>
                 <Label for="name">Класс</Label>
