@@ -7,14 +7,13 @@
  *    1. Router.js
  */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {Card, CardBody, Col, Row, Container, Button, ButtonToolbar, Input, FormGroup, Label, Form} from 'reactstrap';
 import {connect} from "react-redux";
-import {addBatch, loadBatchList, generateZoomLink} from "Actions/admin";
+import {addBatch } from "Actions/admin";
 import {loadTemplateList} from "Actions/templates";
 import {bindActionCreators} from "redux";
 import {Field, reduxForm, formValueSelector} from "redux-form";
-import {renderField, renderTextArea} from 'Components/form/Text'
 import renderSelectField from 'Components/form/Select'
 import SurveyForm from "./SurveyForm";
 import {snackbar} from "../../actions/admin";
@@ -32,7 +31,6 @@ class AddLesson extends React.Component {
   async componentWillMount(){
     await Promise.all([
       this.props.loadTemplateList({full:true}),
-      this.props.loadBatchList({remembered: true})
     ])
     let batchOptions = this.props.batchList.map(x => {return {value: x._id, label: `${x.templateName}(${x.note}) ${x.createdAt}`}});
     batchOptions.unshift({value: false, label: "Don't load"})
@@ -46,9 +44,6 @@ class AddLesson extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.props.generateZoomLink();
-  }
 
   handleSubmit(form) {
     console.log('form', form, 'tList', this.props.templateList);
@@ -113,13 +108,6 @@ const validate = (values, props) => {
   if (!values.className) {
     errors.className = 'required';
   }
-  // if (!props.captcha) {
-  //   errors.className = 'load captcha';
-  // }
-  // if (!props.zoomLink || props.zoomLink === "") {
-  //   console.log(!props.zoomLink, props.zoomLink === "")
-  //   errors.className = 'generate zoom link please';
-  // }
   return errors
 };
 
@@ -162,9 +150,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addBatch,
-    loadBatchList,
     loadTemplateList,
-    generateZoomLink,
     snackbar,
   }, dispatch);
 }

@@ -9,7 +9,6 @@
  */
 
 import { history } from "../app/history";
-import constants from "../constants";
 import openSocket from "socket.io-client";
 import { getUrlParams } from "../utils";
 const adr = process.env.API_HOST.substr(1, process.env.API_HOST.length - 2);
@@ -69,92 +68,7 @@ export const whoami = () => {
       if (adminToken) {
         initData.adminToken = adminToken;
       }
-
-      if (token) {
-        initData.token = token;
-        dispatch(setLoading(true));
-        socket.emit("init", initData);
-      } else {
-        if (!initData.mturkId || !initData.assignmentId) {
-          //not logged, wrong info
-          dispatch({
-            type: APP_READY,
-          });
-
-          dispatch(setSnackbar("wrong credentials"));
-          localStorage.clear();
-          history.push("/not-logged");
-        } else {
-          dispatch(setLoading(true));
-          socket.emit("init", initData);
-          //history.push('/waiting')
-        }
-      }
-      socket.once("init-res", (data) => {
-        dispatch(setLoading(false));
-        if (!data || !data.user) {
-          //init goes wrong
-          dispatch({
-            type: APP_READY,
-          });
-          dispatch(setSnackbar("wrong credentials"));
-          history.push("/not-logged");
-          return;
-        }
-        //init goes right
-        if (!token || token !== data.user.token) {
-          localStorage.setItem("bang-token", data.user.token);
-        }
-        dispatch({
-          type: INIT_SUCCESS,
-          data: { user: data.user },
-        });
-        dispatch({
-          type: APP_READY,
-        });
-        if (!data.user.isAdmin) {
-          if (data.user.systemStatus === "willbang") {
-            const [batchId, genNumber] = [
-              getUrlParams().batchid,
-              getUrlParams().gennumber,
-            ];
-            if (batchId && genNumber) {
-              history.push(
-                "/waiting" + "?batchId=" + batchId + "&genNumber=",
-                genNumber
-              );
-            }
-            if (data.user.batch) {
-              history.push("/batch");
-            } else {
-              history.push("/waiting");
-            }
-          } else if (data.user.systemStatus === "hasbanged") {
-            history.push("/batch-end");
-          }
-        } else {
-          localStorage.setItem("bang-admin-token", data.adminToken);
-        }
-      });
-      socket.on("send-error", (data) => {
-        dispatch(setSnackbar(data));
-      });
-      socket.on("kick-afk", (data) => {
-        window.removeEventListener("beforeunload", listener);
-        history.push("/kicked");
-      });
-      socket.on("stop-batch", (batch) => {
-        dispatch(setSnackbar("Batch was stopped"));
-        if (batch.status === "waiting") {
-          history.push("/waiting");
-        } else if (batch.status === "active") {
-          history.push("/batch-end");
-        }
-      });
-      socket.emit("send-error", "There is no right batch");
-    }
-  };
-};
+}; } }
 
 export const setLoading = (value) => {
   return (dispatch, getState) => {
@@ -168,11 +82,6 @@ export const errorCatcher = (err, dispatch, msg = "Something went wrong") => {
   dispatch(setLoading(false));
 };
 
-export const clearErrors = () => {
-  return (dispatch) => {
-    dispatch({ type: CLEAR_REG_ERRORS });
-  };
-};
 
 export const setSnackbar = (message) => {
   return {
@@ -187,11 +96,3 @@ export const clearSnackbar = (message) => {
   };
 };
 
-export const joinBang = (id) => {
-  return function(dispatch) {
-    dispatch(setLoading(true));
-    socket.emit("join-bang", {});
-    window.location.href =
-      "https://bang-dev.deliveryweb.ru/accept?assignmentId=" + id;
-  };
-};

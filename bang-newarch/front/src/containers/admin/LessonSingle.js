@@ -91,7 +91,7 @@ class LessonSingle extends React.Component {
     isReady: false,
     lesson: {
       id: 1,
-      title: '4:20 LESSON',
+      title: 'Астрофизика',
     },
     activeNodeId: null,
     userList: [],
@@ -109,8 +109,10 @@ class LessonSingle extends React.Component {
       timer: state.timer - 1
     }));
     if (this.state.timer <= 0) {
-      console.log('loading users')
-      this.props.loadUserList();
+      let new_students = []
+      this.state.cool_students.forEach(x => new_students.push(Object.assign({photo: x.photo}, this.props.userList.find(y => y.id === x.id))))
+      console.log('cool students', this.state.cool_students, this.props.userList, new_students);
+      this.props.loadUserList().then(t => this.setState({cool_students: new_students}));
       this.state.timer = this.TIMER_INT;
     }
   }
@@ -287,7 +289,6 @@ class LessonSingle extends React.Component {
         }
       })
     })
-    console.log('circle', sadCount, happyCount, ntCount)
     this.setState({sad: sadCount, happy: happyCount, neutral: ntCount});
   }
 
@@ -309,7 +310,6 @@ class LessonSingle extends React.Component {
     let worstStats = []
     let bestStats = [];
     try {
-      console.log('worst student', this.state.worst_student);
       worstStats = this.state.worst_student.lessons[0].emotions.map(em => this.typeToScore(em.emotion_type));
     }
     catch (e) {
@@ -317,7 +317,6 @@ class LessonSingle extends React.Component {
     };
 
     try {
-      console.log('best student', this.state.best_student);
       bestStats = this.state.best_student.lessons[0].emotions.map(em => this.typeToScore(em.emotion_type));
     }
     catch (e) {
@@ -326,7 +325,6 @@ class LessonSingle extends React.Component {
     if (!bestStats) {
       bestStats = [];
     }
-    console.log('beststats', bestStats)
 
     return (
       <Container style={{maxWidth: '100%'}}>
@@ -399,7 +397,7 @@ class LessonSingle extends React.Component {
                               <h5>
                                 Самый заинтересованный
                               </h5>
-                              <CardTitle>{this.state.best_student.first_name ? this.state.best_student.first_name : "" + " " + this.state.best_student.last_name ? this.state.best_student.last_name: ""}</CardTitle>
+                              <CardTitle>{(this.state.best_student.first_name ? this.state.best_student.first_name : "") + " " + (this.state.best_student.last_name ? this.state.best_student.last_name: "")}</CardTitle>
                                 <Bar
                                   data={this.getChartDataset(
                                       [...bestStats],
@@ -420,7 +418,7 @@ class LessonSingle extends React.Component {
                               <h5>
                                 Наименее заинтересованный
                               </h5>
-                              <CardTitle>{this.state.worst_student.last_name}</CardTitle>
+                              <CardTitle>{(this.state.worst_student.first_name ? this.state.worst_student.first_name : "") + " " + (this.state.worst_student.last_name ? this.state.worst_student.last_name: "")}</CardTitle>
                                 <Bar
                                   data={this.getChartDataset(
                                     [...worstStats],

@@ -1,7 +1,6 @@
 import {errorCatcher, setLoading, setSnackbar} from './app'
 import {history} from '../app/history';
 import {axios, axiosP} from "./axiosConfig";
-import {CLEAR_TEMPLATES} from "./admin";
 
 export const TEMPLATE_FETCHED = 'TEMPLATE_FETCHED';
 export const TEMPLATES_FETCHED = 'TEMPLATES_FETCHED';
@@ -148,14 +147,6 @@ export function chooseTemplate(template) {
         dispatch({
             type: TEMPLATE_FETCHED,
             data: template
-        });
-    };
-}
-
-export function clearTemplates(template) {
-    return (dispatch) => {
-        dispatch({
-            type: CLEAR_TEMPLATES,
         });
     };
 }

@@ -25,10 +25,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
   loadUserList,
-  addUser,
-  deleteUser,
-  clearUsers,
-  payBonus,
 } from "Actions/admin";
 import Pagination from "Components/Pagination";
 import {loadTemplateList} from "../../actions/templates";
@@ -101,7 +97,6 @@ class UserList extends React.Component {
 
   handleBonus = (user) => {
     console.log(this.state.bonusAmount);
-    this.props.payBonus(user._id, this.state.bonusAmount);
   };
 
   componentWillUnmount() {
@@ -189,10 +184,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       loadUserList,
-      addUser,
-      deleteUser,
-      clearUsers,
-      payBonus,
       loadTemplateList,
     },
     dispatch

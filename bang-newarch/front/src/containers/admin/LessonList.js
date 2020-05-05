@@ -25,7 +25,7 @@ import {
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import { loadBatchResult, loadUserList } from 'Actions/admin'
+import { loadUserList } from 'Actions/admin'
 import Select from "react-select";
 import Chat from '../Chat'
 import moment from "moment";
@@ -80,11 +80,11 @@ class LessonList extends React.Component {
       },
       {
         id: 3,
-        title: '05 мая',
+        title: '05 мая(сегодня)',
         nodes: [
           {
             id: 31,
-            title: '4 "A" 9:00',
+            title: '9А Астрофизика 7:00',
           },
         ]
       },
@@ -144,6 +144,7 @@ class LessonList extends React.Component {
     const t1 = new Date(emotion.end_time)
     const t2 = new Date(emotion.start_time)
     return Math.abs((t1.getTime() - t2.getTime()) / 1000)
+    // return Math.round(Math.random() * 10)
   }
 
   colorByEmotion(emotion) {
@@ -325,7 +326,7 @@ class LessonList extends React.Component {
                                     <Media src={student.photo} width={64} height={64}/>
                                   </td>
                                   <td style={{width: '250px'}}>
-                                    <b>{student.first_name + " " + student.last_name}</b>
+                                    <button onClick={() => {history.push('/users/' + student.id)}}>{student.first_name + " " + student.last_name}</button>
                                   </td>
                                   <td>
                                     <Progress multi>
@@ -348,8 +349,8 @@ class LessonList extends React.Component {
 
                                   <td style={{width: '84px'}}>
                                     {student.lessons[0].actions.map(a => {
-                                      return (this.dif(a) / 60).toFixed(0);
-                                    })}
+                                      return (this.dif(a) / 60);
+                                    }).reduce((a,b) => a+b).toFixed(1)}
                                   </td>
                                 </tr>
                               }

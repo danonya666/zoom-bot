@@ -1,230 +1,33 @@
 import { errorCatcher, setLoading, setSnackbar } from "./app";
 import { history } from "../app/history";
 import {axios, axiosP } from "./axiosConfig";
-export const BATCH_INFO_FETCHED = "BATCH_INFO_FETCHED";
-export const BATCH_ADDED = "BATCH_ADDED";
-export const BATCH_UPDATED = "BATCH_UPDATED";
-export const BATCH_DELETED = "BATCH_DELETED";
-export const CLEAR_BATCHES = "CLEAR_BATCHES";
-export const BATCHES_FETCHED = "BATCHES_FETCHED";
-export const CLEAR_TEMPLATES = "CLEAR_TEMPLATES";
-export const USER_DELETED = "USER_DELETED";
 export const USERS_FETCHED = "USERS_FETCHED";
-export const USER_ADDED = "USER_ADDED";
 export const SWITCH_EMPTY_BATCHES_VISIBILITY =
   "SWITCH_EMPTY_BATCHES_VISIBILITY";
-export const BONUS_PAID = "BONUS_PAID";
-export const LOGS_FETCHED = "LOGS_FETCHED";
-export const ZOOM_LINK_FETCHED = "ZOOM_LINK_FETCHED";
-export const CAPTCHA_FETCHED = "CAPTCHA_FETCHED";
-
-export function updateBatch(batch) {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "put",
-      url: "batches/",
-      data: batch,
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_UPDATED,
-          data: response.data.batch,
-        });
-        dispatch(setSnackbar("Batch was updated"));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
 
 export function addBatch(batch) {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-    return axiosP({
-      method: "post",
-      url: "lesson/",
-      data: batch,
-    })
-      .then((response) => {
-          console.log('response', response)
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_ADDED,
-          data: response.data.batch,
-        });
-        dispatch(setSnackbar("Lesson was added"));
-        history.push("/lessons");
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function deleteBatch(id) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    return axios({
-      method: "delete",
-      url: "batches/" + id + "/",
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_DELETED,
-          data: { _id: id },
-        });
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function loadBatchList(params) {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-
-    return axios({
-      method: "get",
-      url: "admin/batches/",
-      params: params,
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCHES_FETCHED,
-          data: response.data.batchList,
-        });
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function loadBatch(batchId) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-
-    return axios({
-      method: "get",
-      url: "batches/" + batchId + "/",
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_INFO_FETCHED,
-          data: response.data.batch,
-        });
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function chooseBatch(batch) {
-  return (dispatch) => {
-    dispatch({
-      type: BATCH_INFO_FETCHED,
-      data: batch,
-    });
-  };
-}
-
-export function clearBatches() {
-  return (dispatch) => {
-    dispatch({
-      type: BATCHES_FETCHED,
-      data: [],
-    });
-  };
-}
-
-export function switchBatchesVisibility(value) {
-  return (dispatch) => {
-    localStorage.setItem("hideEmptyBatches", value ? "hide" : "show");
-    dispatch({
-      type: SWITCH_EMPTY_BATCHES_VISIBILITY,
-      data: value,
-    });
-  };
-}
-
-export function clearUsers() {
-  return (dispatch) => {
-    dispatch({
-      type: USERS_FETCHED,
-      data: [],
-    });
-  };
-}
-
-export function loadBatchResult(id) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "get",
-      url: "admin/batch-result/" + id + "/",
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_INFO_FETCHED,
-          data: response.data.batch,
-        });
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function stopBatch(id) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "put",
-      url: "admin/batches/" + id + "/stop/",
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: BATCH_UPDATED,
-          data: response.data.batch,
-        });
-        dispatch(setSnackbar("Batch was stopped"));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function addUser() {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "post",
-      url: "admin/users/",
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: USER_ADDED,
-          data: response.data.user,
-        });
-        dispatch(setSnackbar("added"));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
+    return (dispatch) => {
+        dispatch(setLoading(true));
+        return axiosP({
+            method: "post",
+            url: "lesson/",
+            data: batch,
+        })
+            .then((response) => {
+                console.log('response', response)
+                dispatch(setLoading(false));
+                let BATCH_ADDED = "BATCH_ADDED";
+                dispatch({
+                    type: BATCH_ADDED,
+                    data: response.data.batch,
+                });
+                dispatch(setSnackbar("Lesson was added"));
+                history.push("/lessons");
+            })
+            .catch((err) => {
+                errorCatcher(err, dispatch);
+            });
+    };
 }
 
 export function loadUserList(params) {
@@ -249,121 +52,6 @@ export function loadUserList(params) {
   };
 }
 
-export function deleteUser(id) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "delete",
-      url: "admin/users/",
-      data: { _id: id },
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch({
-          type: USER_DELETED,
-          data: { _id: id },
-        });
-        dispatch(setSnackbar("deleted"));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function notifyUsers(params) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "post",
-      url: "admin/notify/",
-      data: params,
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch(setSnackbar("Done"));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function payBonus(id, amount) {
-  return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "post",
-      url: "admin/users/pay-bonus",
-      data: { _id: id, amount: amount },
-    })
-      .then((response) => {
-        dispatch(setLoading(false));
-        dispatch(setSnackbar(`Paid $${amount}!`));
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function loadLogs(params) {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-    return axios({
-      method: "get",
-      url: "admin/logs/",
-    })
-      .then((response) => {
-        console.log(
-          "response, data",
-          response,
-          response.data.logs,
-          response.data.errorLogs
-        );
-        dispatch(setLoading(false));
-        dispatch({
-          type: LOGS_FETCHED,
-          data: response.data,
-        });
-      })
-      .catch((err) => {
-        errorCatcher(err, dispatch);
-      });
-  };
-}
-
-export function generateZoomLink(currentZoomLink) {
-  return (dispatch) => {
-    if (!currentZoomLink || currentZoomLink === "") {
-        dispatch(setLoading(true));
-        return axios({
-            method: "get",
-            url: "admin/zoomLink/",
-        })
-            .then((response) => {
-                console.log(
-                    "response, data",
-                    response,
-                    response.data.logs,
-                    response.data.errorLogs
-                );
-                dispatch(setLoading(false));
-                dispatch({
-                    type: ZOOM_LINK_FETCHED,
-                    data: response.data,
-                });
-            })
-            .catch((err) => {
-                errorCatcher(err, dispatch);
-            });
-    } else {
-        dispatch(setSnackbar("Zoom Link already generated!"))
-    }
-
-  };
-}
-
 export function snackbar(message) {
     console.log()
     return (dispatch) => {
@@ -372,59 +60,3 @@ export function snackbar(message) {
     }
 }
 
-export function getCaptcha() {
-    console.log(213321)
-    return (dispatch) => {
-        console.log("getting captcha");
-        dispatch(setLoading(true));
-        return axiosP({
-            method: "get",
-            url: "api/captcha",
-        })
-            .then((response) => {
-                console.log(
-                    "response, data",
-                    response,
-                    response.data.logs,
-                    response.data.errorLogs
-                );
-                dispatch(setLoading(false));
-                dispatch({
-                    type: CAPTCHA_FETCHED,
-                    data: response.data,
-                });
-            })
-            .catch((err) => {
-                errorCatcher(err, dispatch);
-            });
-    };
-}
-
-export function sendDecodedCaptcha(captcha) {
-    return (dispatch) => {
-        console.log("sending captcha", captcha);
-        // dispatch(setLoading(true));
-        return axiosP({
-            method: "post",
-            url: "api/captcha",
-            data: {captcha},
-            params: {captcha}
-        })
-            // .then((response) => {
-            //     console.log(
-            //         "response, data",
-            //         response,
-            //         response.data.logs,
-            //         response.data.errorLogs
-            //     );
-            //     dispatch(setLoading(false));
-            //     dispatch({
-            //         type: CAPTCHA_FETCHED,
-            //         data: response.data,
-            //     });
-            // })
-            .catch((err) => {
-                errorCatcher(err, dispatch);
-            });
-    };
-}

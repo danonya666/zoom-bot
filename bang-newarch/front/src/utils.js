@@ -1,17 +1,3 @@
-export const parseNick = (nick) => {
-  if (!nick) return [];
-  let animalIndex = -1;
-  for (let i = 0; i < nick.length; i++) {
-    if (nick[i] === nick[i].toUpperCase()) {
-      animalIndex = i;
-      break;
-    }
-  }
-  let animal = nick.slice(animalIndex, nick.length);
-  let adjective = nick.slice(0, animalIndex);
-  return [adjective, animal];
-};
-
 export const getUrlParams = (url) => {
   // get query string from url (optional) or window
   let queryString = url ? url.split("?")[1] : window.location.search.slice(1);
@@ -72,44 +58,6 @@ export const getUrlParams = (url) => {
   }
 
   return obj;
-};
-
-export const shuffle = (array) => {
-  let currentIndex = array.length,
-    temporaryValue,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-};
-
-export const newWindow = (content) => {
-  const wind = window.open();
-  wind.document.open().write(content);
-};
-
-export const pairInArray = (array, item) => {
-  for (let i = 0; i < array.length; i++) {
-    // This if statement depends on the format of your array
-    if (
-      (array[i][0] === item[0] && array[i][1] === item[1]) ||
-      (array[i][1] === item[0] && array[i][0] === item[1])
-    ) {
-      return true; // Found it
-    }
-  }
-  return false; // Not found
 };
 
 export const hourlyWage = process.env.HOURLY_WAGE;

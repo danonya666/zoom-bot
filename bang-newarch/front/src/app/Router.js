@@ -18,7 +18,6 @@ import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import MainWrapper from './MainWrapper';
 import {connect} from "react-redux";
-import Batch from '../containers/Batch'
 import Waiting from '../containers/Waiting'
 import NotLogged from '../containers/NotLogged'
 import AddLesson from '../containers/admin/AddLesson'
@@ -52,7 +51,6 @@ const MainRouter = (props) => {
         <Switch>
           <Route exact path='/home' component={Home} />
           <Route exact path='/waiting' component={Waiting}/>
-          <Route exact path='/batch' component={Batch}/>
           <Route exact path='/batch-end' component={BatchEnd}/>
           <Route exact path='/lesson-add' component={AddLesson}/>
           <Route exact path='/lessons' component={LessonList}/>

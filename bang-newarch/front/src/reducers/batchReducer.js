@@ -4,7 +4,7 @@ import {
   REFRESH_BATCH,
   ADD_MESSAGE,
   VOTED,
-} from "../actions/batches";
+} from "../actions/lessons";
 
 const initialState = {
   batch: null,
