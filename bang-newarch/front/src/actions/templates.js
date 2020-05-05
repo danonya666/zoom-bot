@@ -1,6 +1,6 @@
 import {errorCatcher, setLoading, setSnackbar} from './app'
 import {history} from '../app/history';
-import {axios} from "./axiosConfig";
+import {axios, axiosP} from "./axiosConfig";
 import {CLEAR_TEMPLATES} from "./admin";
 
 export const TEMPLATE_FETCHED = 'TEMPLATE_FETCHED';
@@ -105,16 +105,16 @@ export function cloneTemplate(id) {
 export function loadTemplateList(params) {
     return dispatch => {
         dispatch(setLoading(true));
-        return axios({
+        return axiosP({
             method: 'get',
-            url: 'admin/templates/',
+            url: 'class/',
             params
         })
             .then((response) => {
                 dispatch(setLoading(false));
                 dispatch({
                     type: TEMPLATES_FETCHED,
-                    data: response.data.templateList
+                    data: response.data
                 });
             })
             .catch(err => {
@@ -126,15 +126,15 @@ export function loadTemplateList(params) {
 export function loadTemplate(templateId) {
     return (dispatch, getState) => {
         dispatch(setLoading(true));
-        return axios({
+        return axiosP({
             method: 'get',
-            url: 'admin/templates/' + templateId + '/',
+            url: 'class/' + templateId + '/',
         })
             .then((response) => {
                 dispatch(setLoading(false));
                 dispatch({
                     type: TEMPLATE_FETCHED,
-                    data: response.data.template
+                    data: response.data
                 });
             })
             .catch(err => {

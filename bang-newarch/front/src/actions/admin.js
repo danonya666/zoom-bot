@@ -1,6 +1,6 @@
 import { errorCatcher, setLoading, setSnackbar } from "./app";
 import { history } from "../app/history";
-import {axios, axiosP} from "./axiosConfig";
+import {axios, axiosP } from "./axiosConfig";
 export const BATCH_INFO_FETCHED = "BATCH_INFO_FETCHED";
 export const BATCH_ADDED = "BATCH_ADDED";
 export const BATCH_UPDATED = "BATCH_UPDATED";

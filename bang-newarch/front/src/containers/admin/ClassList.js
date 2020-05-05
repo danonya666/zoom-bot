@@ -58,10 +58,10 @@ class ClassList extends React.Component {
                   <tbody>
                   {templateList.map((template, index) => {
                     console.log(template);
-                    return <tr key={template._id}>
-                      <td onClick={() => history.push('/templates/' + template._id)}>{index + 1}</td>
-                      <td onClick={() => history.push('/templates/' + template._id)}>{template.name}</td>
-                      <td onClick={() => history.push('/templates/' + template._id)}> {template.cases.length}</td>
+                    return <tr key={template.id}>
+                      <td onClick={() => history.push('/templates/' + template.id)}>{index + 1}</td>
+                      <td onClick={() => history.push('/templates/' + template.id)}>{template.name}</td>
+                      <td onClick={() => history.push('/templates/' + template.id)}> {template.students.length}</td>
                       {/*<td onClick={() => history.push('/templates/' + template._id)}>{template.teamFormat ? template.teamFormat : 'multi'}</td>*/}
                       <td>
                         <Button className="btn btn-primary"
