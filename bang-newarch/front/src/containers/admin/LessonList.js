@@ -44,7 +44,7 @@ class LessonList extends React.Component {
     lessons: [
       {
         id: 1,
-        title: '03.05',
+        title: '03 мая',
         nodes: [
           {
             id: 11,
@@ -62,7 +62,7 @@ class LessonList extends React.Component {
       },
       {
         id: 2,
-        title: '04.05',
+        title: '04 мая',
         nodes: [
           {
             id: 21,
@@ -80,7 +80,7 @@ class LessonList extends React.Component {
       },
       {
         id: 3,
-        title: '05.05',
+        title: '05 мая',
         nodes: [
           {
             id: 31,
@@ -89,7 +89,7 @@ class LessonList extends React.Component {
         ]
       },
     ],
-    activeNodeId: null,
+    activeNodeId: 1,
     students: [
       {
         photo: 'http://via.placeholder.com/64/',
@@ -285,7 +285,7 @@ class LessonList extends React.Component {
                             {this.activeNode?
                               <div className='color-definitions'>
                                 <a style={{marginRight: '2rem'}} href="#" onClick={() => {history.push('/lessons/' + this.activeNodeId)}}>
-                                  {this.activeNode.title}
+                                  {this.activeNode ? this.activeNode.title : ""}
                                 </a>
                                 <div className='color-definitions'>
                                 {
@@ -299,7 +299,7 @@ class LessonList extends React.Component {
                                 </div>
                               </div>:
                               <p>
-                                Выберите урок
+                                {this.activeNode? this.activeNode.title : ""}
                               </p>
                             }
 
@@ -347,7 +347,9 @@ class LessonList extends React.Component {
                                   </td>
 
                                   <td style={{width: '84px'}}>
-                                    {student.time}
+                                    {student.lessons[0].actions.map(a => {
+                                      return (this.dif(a) / 60).toFixed(0);
+                                    })}
                                   </td>
                                 </tr>
                               }

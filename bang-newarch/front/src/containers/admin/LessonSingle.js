@@ -407,14 +407,6 @@ class LessonSingle extends React.Component {
                                   options={lineOptions}
                                 >
                                 </Bar>
-                              <CardTitle>Николай Иванович</CardTitle>
-                              <Bar
-                                data={this.getChartDataset(
-                                  [-1, -3, 1, 0, 3, -1, 0, 2, 1, 0],
-                                )}
-                                options={lineOptions}
-                              >
-                              </Bar>
                             </CardBody>
                           </Card>
                         </CardBody>
@@ -437,15 +429,6 @@ class LessonSingle extends React.Component {
                                   options={lineOptions}
                                 >
                                 </Bar>
-                              <CardTitle>Николай Николаевич</CardTitle>
-                              <Bar
-                                data={this.getChartDataset(
-                                  [1, 2, 3, 3, 3, -1, 0, 2, 1, 0,],
-                                  'rgba(255,100,100,{})',
-                                )}
-                                options={lineOptions}
-                              >
-                              </Bar>
                             </CardBody>
                           </Card>
                         </CardBody>
