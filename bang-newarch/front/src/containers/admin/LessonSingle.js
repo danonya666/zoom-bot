@@ -21,7 +21,7 @@ import {
   UncontrolledCollapse,
   Button,
   ButtonGroup,
-  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner, CardImg, CardText, CardTitle
+  ListGroup, ListGroupItem, Media, Progress, UncontrolledTooltip, Spinner, CardImg, CardText, CardTitle, Alert
 } from 'reactstrap';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -59,23 +59,23 @@ const lineOptions = {
   tooltips: {
     enabled: false,
   },
-  scales:{
+  scales: {
     xAxes: [{
       display: false,
     }],
     yAxes: [{
       gridLines: {
-        display:false,
+        display: false,
       },
       ticks: {
         suggestedMin: -3,    // minimum will be 0, unless there is a lower value.
         suggestedMax: 3,
         stepSize: 1,
-        callback: function(value, index, values) {
+        callback: function (value, index, values) {
           return EMOTIONS[value];
         },
         fontSize: 10,
-        minRotation : 0,
+        minRotation: 0,
         gridLines: {
           zeroLineWidth: 3,
           zeroLineColor: "#2C292E",
@@ -94,9 +94,7 @@ class LessonSingle extends React.Component {
       title: '4:20 LESSON',
     },
     activeNodeId: null,
-    userList: [
-
-    ],
+    userList: [],
     cool_students: [],
     timer: this.TIMER_INT,
     best_student: {first_name: 'Загрузка..', last_name: 'Загрузка..'},
@@ -118,7 +116,7 @@ class LessonSingle extends React.Component {
   }
 
   colorByEmotion(emotion) {
-    switch(emotion) {
+    switch (emotion) {
       case 'AY':
       case 'SD':
         return 'danger';
@@ -136,12 +134,12 @@ class LessonSingle extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
+
+    this.props.loadUserList().then(t => this.setStudentsRandomPhotos().then(t => {
       this.setState({
         isReady: true,
       })
-      this.props.loadUserList().then(t => this.setStudentsRandomPhotos().then(t => {}));
-    }, Math.random() * 2500)
+    }));
     setInterval(this.tick, 1000)
     setInterval(() => {this.bestStudent(this.state.cool_students)}, 10000)
     setInterval(() => {this.worstStudent(this.state.cool_students)}, 10000)
@@ -150,13 +148,13 @@ class LessonSingle extends React.Component {
 
   async setStudentsRandomPhotos() {
     let newStudents = [];
-    for(const student of this.props.userList) {
+    for (const student of this.props.userList) {
       const img = await this.getRandomUserImage();
       Math.random() > 0.2 ?
-          newStudents.push({
-            ...student,
-            photo: img,
-          }) : 1;
+        newStudents.push({
+          ...student,
+          photo: img,
+        }) : 1;
     }
     this.setState({
       cool_students: newStudents,
@@ -177,14 +175,14 @@ class LessonSingle extends React.Component {
   }
 
   getChartDataset(data, color = 'rgba(75,192,192,{})') {
-    const backgroundColor = color.replace('{}','0.4');
-    const borderColor = color.replace('{}','1');
-    const pointBorderColor = color.replace('{}','1');
-    const pointHoverBorderColor = color.replace('{}','1');
-    const pointHoverBackgroundColor = color.replace('{}','1');
+    const backgroundColor = color.replace('{}', '0.4');
+    const borderColor = color.replace('{}', '1');
+    const pointBorderColor = color.replace('{}', '1');
+    const pointHoverBorderColor = color.replace('{}', '1');
+    const pointHoverBackgroundColor = color.replace('{}', '1');
     return {
-      labels: [...new Array(data.length)].map((item,i)=>i),
-        datasets: [
+      labels: [...new Array(data.length)].map((item, i) => i),
+      datasets: [
         {
           fill: false,
           lineTension: 0.1,
@@ -294,7 +292,7 @@ class LessonSingle extends React.Component {
   }
 
   getEmotionByColor(color) {
-    switch(color) {
+    switch (color) {
       case 'danger':
         return 'Злость';
       case 'warning':
@@ -305,8 +303,6 @@ class LessonSingle extends React.Component {
         return 'Спокойствие';
     }
   }
-
-
 
 
   render() {
@@ -342,6 +338,32 @@ class LessonSingle extends React.Component {
                   <div className='card__title'>
                     <h5 className='bold-text'>{this.state.lesson.title}</h5>
                   </div>
+                  <Button color="primary" id="toggler">
+                    ZOOM трансляция
+                  </Button>
+                  <UncontrolledCollapse toggler="#toggler">
+                    <Alert color="success">
+                      <p className="mb-0">
+                        Join Zoom Meeting<br />
+                        <a href="https://us02web.zoom.us/j/85314443993?pwd=WVB4TGorRm95amZDVmZBWERQaVhGUT09">https://us02web.zoom.us/j/85314443993?pwd=WVB4TGorRm95amZDVmZBWERQaVhGUT09</a><br />
+                        Meeting ID: 853 1444 3993<br />
+                        Password: 891048<br />
+                        One tap mobile<br />
+                        +13017158592,,85314443993#,,1#,891048# US (Germantown)<br />
+                        +13126266799,,85314443993#,,1#,891048# US (Chicago)<br />
+                        Dial by your location<br />
+                        +1 301 715 8592 US (Germantown)<br />
+                        +1 312 626 6799 US (Chicago)<br />
+                        +1 346 248 7799 US (Houston)<br />
+                        +1 669 900 6833 US (San Jose)<br />
+                        +1 929 205 6099 US (New York)<br />
+                        +1 253 215 8782 US (Tacoma)<br />
+                        Meeting ID: 853 1444 3993<br />
+                        Password: 891048<br />
+                        Find your local number: <a href="https://us02web.zoom.us/u/kbiyqt6cci">https://us02web.zoom.us/u/kbiyqt6cci</a>
+                      </p>
+                    </Alert>
+                  </UncontrolledCollapse>
                   <Row>
                     <Col md={12} lg={4}>
                       <Card className='card-shadow'>
@@ -385,6 +407,14 @@ class LessonSingle extends React.Component {
                                   options={lineOptions}
                                 >
                                 </Bar>
+                              <CardTitle>Николай Иванович</CardTitle>
+                              <Bar
+                                data={this.getChartDataset(
+                                  [-1, -3, 1, 0, 3, -1, 0, 2, 1, 0],
+                                )}
+                                options={lineOptions}
+                              >
+                              </Bar>
                             </CardBody>
                           </Card>
                         </CardBody>
@@ -407,6 +437,15 @@ class LessonSingle extends React.Component {
                                   options={lineOptions}
                                 >
                                 </Bar>
+                              <CardTitle>Николай Николаевич</CardTitle>
+                              <Bar
+                                data={this.getChartDataset(
+                                  [1, 2, 3, 3, 3, -1, 0, 2, 1, 0,],
+                                  'rgba(255,100,100,{})',
+                                )}
+                                options={lineOptions}
+                              >
+                              </Bar>
                             </CardBody>
                           </Card>
                         </CardBody>
@@ -424,7 +463,7 @@ class LessonSingle extends React.Component {
                           <th colSpan={3}>
                             <div className='color-definitions'>
                               {
-                                ['danger','warning','success','info'].map(color =>
+                                ['danger', 'warning', 'success', 'info'].map(color =>
                                   <div className="color-definition">
                                     <div className={color}></div>
                                     <span>- {this.getEmotionByColor(color)}</span>
@@ -434,7 +473,7 @@ class LessonSingle extends React.Component {
                             </div>
                           </th>
                           <th style={{width: '100px'}}>
-                            <ClockIcon color="#DC3545" id="clock-tooltip" />
+                            <ClockIcon color="#DC3545" id="clock-tooltip"/>
                             <UncontrolledTooltip placement="top" target="clock-tooltip">
                               Время отсутствия в кадре
                             </UncontrolledTooltip>
@@ -443,37 +482,36 @@ class LessonSingle extends React.Component {
                         </thead>
                         <tbody>
                         {
-                          this.state.cool_students.map(student =>
-                          {
-                            const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
-                            return <tr key={student.id}>
-                              <td style={{width: '84px'}}>
-                                <Media src={student.photo} width={64} height={64}/>
-                              </td>
-                              <td style={{width: '250px'}}>
-                                <b>{student.first_name + " " + student.last_name}</b>
-                              </td>
-                              <td>
-                                <Progress multi>
-                                  {
-                                    student.lessons[0].emotions.map(emotion =>
-                                    <Progress
-                                            key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random()*1000}`}
-                                            bar
-                                            color={this.colorByEmotion(emotion.emotion_type)}
-                                            value={this.dif(emotion) / fullLength * 100}
+                          this.state.cool_students.map(student => {
+                              const fullLength = student.lessons[0].emotions.map(x => this.dif(x)).reduce((a, b) => a + b)
+                              return <tr key={student.id}>
+                                <td style={{width: '84px'}}>
+                                  <Media src={student.photo} width={64} height={64}/>
+                                </td>
+                                <td style={{width: '250px'}}>
+                                  <b>{student.first_name + " " + student.last_name}</b>
+                                </td>
+                                <td>
+                                  <Progress multi>
+                                    {
+                                      student.lessons[0].emotions.map(emotion =>
+                                        <Progress
+                                          key={`${emotion.emotion_type}#${emotion.start_time.toString()}#${Math.random() * 1000}`}
+                                          bar
+                                          color={this.colorByEmotion(emotion.emotion_type)}
+                                          value={this.dif(emotion) / fullLength * 100}
                                         />
-                                    )
-                                  }
-                                </Progress>
-                              </td>
+                                      )
+                                    }
+                                  </Progress>
+                                </td>
 
-                              <td>
-                                {student.lessons[0].actions && student.lessons[0].actions.length ?
-                                (student.lessons[0].actions.map(x => this.dif(x)).reduce((a,b) => a+b) / 60).toFixed(0): 0}
-                              </td>
-                            </tr>
-                          }
+                                <td>
+                                  {student.lessons[0].actions && student.lessons[0].actions.length ?
+                                    (student.lessons[0].actions.map(x => this.dif(x)).reduce((a, b) => a + b) / 60).toFixed(0) : 0}
+                                </td>
+                              </tr>
+                            }
                           )
                         }
                         </tbody>
@@ -504,10 +542,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-      {
-        loadUserList,
-      },
-      dispatch
+    {
+      loadUserList,
+    },
+    dispatch
   );
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(LessonSingle);

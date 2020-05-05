@@ -1,14 +1,14 @@
 /** AddBatch.js
  *  front-end
- * 
+ *
  *  admin only layout for adding  a batch
- * 
+ *
  *  called by:
- *    1. Router.js    
+ *    1. Router.js
  */
 
 import React, {PureComponent} from 'react';
-import {Card, CardBody, Col, Row, Container, Button, ButtonToolbar} from 'reactstrap';
+import {Card, CardBody, Col, Row, Container, Button, ButtonToolbar, Input, FormGroup, Label, Form} from 'reactstrap';
 import {connect} from "react-redux";
 import {addBatch, loadBatchList, generateZoomLink} from "Actions/admin";
 import {loadTemplateList} from "Actions/templates";
@@ -20,7 +20,7 @@ import SurveyForm from "./SurveyForm";
 import {snackbar} from "../../actions/admin";
 
 
-class AddBatch extends React.Component {
+class AddLesson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,13 +78,12 @@ class AddBatch extends React.Component {
 
   render() {
     const {invalid, handleSubmit} = this.props;
-    console.log("zoom link", this.props.zoomLink, this.state.zoomLink);
     return (
       <Container>
         <Card>
           {this.state.isReady && <CardBody>
             <div className='card__title'>
-              <h5 className='bold-text'>Add lesson</h5>
+              <h5 className='bold-text'>Добавить урок</h5>
             </div>
             <form className='form form--horizontal' style={{paddingBottom: '5vh'}} onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
               <h5>Filter users by:</h5>
@@ -128,6 +127,22 @@ class AddBatch extends React.Component {
                 >Add lesson</Button>
               </ButtonToolbar>
             </form>
+            <Form onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
+              <FormGroup>
+                <Label for="name">Класс</Label>
+                <Field
+                  name='className'
+                  component={renderSelectField}
+                  options={this.props.templateList.map(t => {return {value: t.name, label: t.name}})}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="name">Название</Label>
+                <Input />
+              </FormGroup>
+              <Button disabled={invalid}>Сохранить</Button>
+
+            </Form>
           </CardBody>}
         </Card>
       </Container>
@@ -150,12 +165,12 @@ const validate = (values, props) => {
   return errors
 };
 
-AddBatch = reduxForm({
+AddLesson = reduxForm({
   form: 'SurveyForm',
   enableReinitialize: true,
   touchOnChange: true,
   validate,
-})(AddBatch);
+})(AddLesson);
 
 const selector = formValueSelector('SurveyForm');
 
@@ -196,4 +211,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddBatch);
+export default connect(mapStateToProps, mapDispatchToProps)(AddLesson);
