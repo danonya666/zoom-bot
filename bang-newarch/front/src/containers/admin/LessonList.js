@@ -271,7 +271,7 @@ class LessonList extends React.Component {
                     <Col md={12} lg={9}>
                       <div className='card__title' style={{height: '50px'}}>
                         <div className='text-right'>
-                          <Button className="btn btn-primary" onClick={() => history.push('/batches-add')}>
+                          <Button className="btn btn-primary" onClick={() => history.push('/lesson-add')}>
                             <PlusIcon size={24} />
                           </Button>
 

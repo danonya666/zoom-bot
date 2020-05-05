@@ -21,7 +21,7 @@ import {connect} from "react-redux";
 import Batch from '../containers/Batch'
 import Waiting from '../containers/Waiting'
 import NotLogged from '../containers/NotLogged'
-import AddBatch from '../containers/admin/AddBatch'
+import AddLesson from '../containers/admin/AddLesson'
 import LessonList from '../containers/admin/LessonList'
 import ClassList from '../containers/admin/ClassList'
 import TemplateInfo from '../containers/admin/TemplateInfo'
@@ -54,7 +54,7 @@ const MainRouter = (props) => {
           <Route exact path='/waiting' component={Waiting}/>
           <Route exact path='/batch' component={Batch}/>
           <Route exact path='/batch-end' component={BatchEnd}/>
-          <Route exact path='/batches-add' component={AddBatch}/>
+          <Route exact path='/lesson-add' component={AddLesson}/>
           <Route exact path='/lessons' component={LessonList}/>
           <Route path='/lessons/:id' component={LessonSingle}/>
           <Route exact path='/classes' component={ClassList}/>
