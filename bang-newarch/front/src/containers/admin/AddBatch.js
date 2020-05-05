@@ -17,8 +17,7 @@ import {Field, reduxForm, formValueSelector} from "redux-form";
 import {renderField, renderTextArea} from 'Components/form/Text'
 import renderSelectField from 'Components/form/Select'
 import SurveyForm from "./SurveyForm";
-import {setSnackbar} from "../../actions/app";
-import {getCaptcha, snackbar, sendDecodedCaptcha} from "../../actions/admin";
+import {snackbar} from "../../actions/admin";
 
 
 class AddBatch extends React.Component {
@@ -74,7 +73,6 @@ class AddBatch extends React.Component {
     batch.bornAfterYear = form.bornAfterYear;
     batch.bornBeforeYear = form.bornBeforeYear;
     batch.zoomLink = this.props.zoomLink;
-    this.props.sendDecodedCaptcha(form.decodedCaptcha)
     this.props.addBatch(batch)
   }
 
@@ -123,32 +121,6 @@ class AddBatch extends React.Component {
               </div>
               <div className='form__form-group'>
 
-                <Button onClick={() => {console.log(1,2,3);this.props.getCaptcha()}}>Get Captcha</Button>
-                {/*{this.props.captcha ?*/}
-                {/*    <Media>*/}
-                {/*      <Media left href="#">*/}
-                {/*        <Media object data-src={this.props.captcha} alt="Generic placeholder image" />*/}
-                {/*      </Media>*/}
-                {/*      <Media body>*/}
-                {/*        <Media heading>*/}
-                {/*          Media heading*/}
-                {/*        </Media>*/}
-                {/*        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.*/}
-                {/*      </Media>*/}
-                {/*    </Media>: {}}*/}
-                {this.props.captcha && <img src={`data:image/png;base64, ${this.props.captcha}`} />
-
-                }
-              </div>
-              <div className='form__form-group'>
-                <label className='form__form-group-label'>Decode Captcha</label>
-                <div className='form__form-group-field'>
-                  <Field
-                      name='decodedCaptcha'
-                      component={renderField}
-                      type='text'
-                  />
-                </div>
               </div>
 
             <ButtonToolbar className='mx-auto form__button-toolbar'>
@@ -171,10 +143,6 @@ const validate = (values, props) => {
   // if (!props.captcha) {
   //   errors.className = 'load captcha';
   // }
-  if (!values.decodedCaptcha) {
-    errors.className = 'fill captcha';
-  }
-  console.log('errors', errors);
   // if (!props.zoomLink || props.zoomLink === "") {
   //   console.log(!props.zoomLink, props.zoomLink === "")
   //   errors.className = 'generate zoom link please';
@@ -193,7 +161,6 @@ const selector = formValueSelector('SurveyForm');
 
 function mapStateToProps(state) {
   return {
-    decodedCaptcha: "",
     templateList: state.template.templateList,
     batchList: state.admin.batchList,
     zoomLink: state.admin.zoomLink,
@@ -226,8 +193,6 @@ function mapDispatchToProps(dispatch) {
     loadTemplateList,
     generateZoomLink,
     snackbar,
-    getCaptcha,
-    sendDecodedCaptcha,
   }, dispatch);
 }
 

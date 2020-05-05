@@ -99,10 +99,14 @@ class LessonSingle extends React.Component {
     ],
     cool_students: [],
     timer: this.TIMER_INT,
+    best_student: {first_name: 'Загрузка..', last_name: 'Загрузка..'},
+    worst_student: {first_name: 'Загрузка..', last_name: 'Загрузка..'},
+    sad: 10,
+    neutral: 20,
+    happy: 30,
   }
 
   tick = () => {
-    console.log('ticking', this.state.timer)
     this.setState(state => ({
       timer: state.timer - 1
     }));
@@ -139,6 +143,9 @@ class LessonSingle extends React.Component {
       this.props.loadUserList().then(t => this.setStudentsRandomPhotos().then(t => {}));
     }, Math.random() * 2500)
     setInterval(this.tick, 1000)
+    setInterval(() => {this.bestStudent(this.state.cool_students)}, 10000)
+    setInterval(() => {this.worstStudent(this.state.cool_students)}, 10000)
+    setInterval(() => {this.updateCircleChart(this.state.cool_students)}, 10000)
   }
 
   async setStudentsRandomPhotos() {
@@ -202,6 +209,90 @@ class LessonSingle extends React.Component {
     };
   }
 
+   typeToScore = (type) => {
+    switch (type) {
+      case "DG":
+        return -3;
+      case "SC":
+        return -2;
+      case "SD":
+        return -1;
+      case "AY":
+        return 0;
+      case "NT":
+        return 1;
+      case "HP":
+        return 2;
+      case "SP":
+        return 3;
+      default:
+        return 0;
+
+    }
+  }
+  bestStudent(students) {
+    let bestScore = -158;
+    let bestStudent;
+    try {
+      bestStudent = students[0];
+    }
+    catch (e) {
+
+    }
+    students.forEach((x, ind) => {
+      let currentScore = 0
+      x.lessons[0].emotions.forEach(y => {
+          currentScore += this.typeToScore(y.emotion_type)
+      })
+      if (currentScore > bestScore) {
+        bestScore = currentScore
+        bestStudent = students[ind];
+      }
+    })
+    if (!bestStudent) {
+      bestStudent = {first_name: "test", last_name: "test"}
+    }
+    this.setState({best_student: bestStudent})
+  }
+
+  worstStudent(students) {
+    let bestScore = 123321;
+    let bestStudent = students[0];
+    students.forEach((x, ind) => {
+      let currentScore = 0
+      x.lessons[0].emotions.forEach(y => {
+        currentScore += this.typeToScore(y.emotion_type)
+      })
+      if (currentScore < bestScore) {
+        bestScore = currentScore
+        bestStudent = students[ind];
+      }
+    })
+    this.setState({worst_student: bestStudent})
+  }
+
+  updateCircleChart(students) {
+    let emoCount = 0;
+    let sadCount = 0;
+    let happyCount = 0;
+    let ntCount = 0;
+
+    students.forEach(x => {
+      emoCount += x.lessons[0].emotions.length
+      x.lessons[0].emotions.forEach(y => {
+        if (y.emotion_type === 'HP') {
+          happyCount++
+        } else if (y.emotion_type === 'NT') {
+          ntCount++
+        } else {
+          sadCount++;
+        }
+      })
+    })
+    console.log('circle', sadCount, happyCount, ntCount)
+    this.setState({sad: sadCount, happy: happyCount, neutral: ntCount});
+  }
+
   getEmotionByColor(color) {
     switch(color) {
       case 'danger':
@@ -219,6 +310,28 @@ class LessonSingle extends React.Component {
 
 
   render() {
+    let worstStats = []
+    let bestStats = [];
+    try {
+      console.log('worst student', this.state.worst_student);
+      worstStats = this.state.worst_student.lessons[0].emotions.map(em => this.typeToScore(em.emotion_type));
+    }
+    catch (e) {
+      worstStats = [];
+    };
+
+    try {
+      console.log('best student', this.state.best_student);
+      bestStats = this.state.best_student.lessons[0].emotions.map(em => this.typeToScore(em.emotion_type));
+    }
+    catch (e) {
+      bestStats = [];
+    };
+    if (!bestStats) {
+      bestStats = [];
+    }
+    console.log('beststats', bestStats)
+
     return (
       <Container style={{maxWidth: '100%'}}>
         <Row>
@@ -240,7 +353,7 @@ class LessonSingle extends React.Component {
 
                           <Doughnut data={{
                             datasets: [{
-                              data: [10, 20, 30],
+                              data: [this.state.sad, this.state.neutral, this.state.happy],
                               backgroundColor: ["#DC3545", "#3BA745", "#F7C10A", "#3FA2B8"]
                             }],
 
@@ -264,10 +377,10 @@ class LessonSingle extends React.Component {
                               <h5>
                                 Самый заинтересованный
                               </h5>
-                              <CardTitle>Николай Иванович</CardTitle>
+                              <CardTitle>{this.state.best_student.first_name ? this.state.best_student.first_name : "" + " " + this.state.best_student.last_name ? this.state.best_student.last_name: ""}</CardTitle>
                                 <Bar
                                   data={this.getChartDataset(
-                                    [-1,-3,1,0,3,-1,0,2,1,0],
+                                      [...bestStats],
                                   )}
                                   options={lineOptions}
                                 >
@@ -285,10 +398,10 @@ class LessonSingle extends React.Component {
                               <h5>
                                 Наименее заинтересованный
                               </h5>
-                              <CardTitle>Николай Николаевич</CardTitle>
+                              <CardTitle>{this.state.worst_student.last_name}</CardTitle>
                                 <Bar
                                   data={this.getChartDataset(
-                                    [1,2,3,3,3,-1,0,2,1,0,],
+                                    [...worstStats],
                                     'rgba(255,100,100,{})',
                                   )}
                                   options={lineOptions}

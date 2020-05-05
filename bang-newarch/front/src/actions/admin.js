@@ -43,12 +43,13 @@ export function updateBatch(batch) {
 export function addBatch(batch) {
   return (dispatch) => {
     dispatch(setLoading(true));
-    return axios({
+    return axiosP({
       method: "post",
-      url: "admin/batches/",
+      url: "lesson/",
       data: batch,
     })
       .then((response) => {
+          console.log('response', response)
         dispatch(setLoading(false));
         dispatch({
           type: BATCH_ADDED,
