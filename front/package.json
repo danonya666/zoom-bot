@@ -100,7 +100,7 @@
     "prettier": "1.15.3",
     "react-hot-loader": "^4.3.4",
     "sass-loader": "^7.0.3",
-    "terser": "^3.14.1",
+    "terser": "^4.8.1",
     "ts-node": "^8.6.1"
   },
   "repository": {
